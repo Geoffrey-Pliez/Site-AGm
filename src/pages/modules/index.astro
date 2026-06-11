@@ -4,13 +4,13 @@ import ModuleCard from "../../components/ModuleCard.astro";
 import { filters, modules } from "../../data/site";
 ---
 
-<BaseLayout title="Modules - Apprenti Geometre mobile">
+<BaseLayout title="Modules - Apprenti Géomètre mobile">
   <section class="page-intro">
     <p class="eyebrow">Composer un parcours</p>
-    <h1>Modules et fiches d'activite</h1>
+    <h1>Modules et fiches d'activité</h1>
     <p>
-      La fiche d'activite decrit la tache que l'eleve doit realiser sur le logiciel.
-      Certaines fiches sont associees a des syntheses et a des documents pour la classe.
+      La fiche d'activité décrit la tâche que l'élève doit réaliser sur le logiciel.
+      Certaines fiches sont associées à des synthèses et à des documents pour la classe.
     </p>
   </section>
 
@@ -21,9 +21,9 @@ import { filters, modules } from "../../data/site";
         <input data-filter-search type="search" placeholder="Titre, objectif..." />
       </label>
       <label>
-        Theme
+        Thème
         <select data-filter="themes">
-          <option value="">Tous les themes</option>
+          <option value="">Tous les thèmes</option>
           {filters.themes.map((theme) => <option value={theme}>{theme}</option>)}
         </select>
       </label>

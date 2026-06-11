@@ -24,7 +24,7 @@ const { item } = Astro.props;
       <section>
         <h2>Objectifs</h2>
         <p>{item.objective}</p>
-        <h2>Resume du module</h2>
+        <h2>Résumé du module</h2>
         <p>{item.summary}</p>
       </section>
       <aside>
@@ -40,15 +40,15 @@ const { item } = Astro.props;
             <p>Documents disponibles depuis la page source.</p>
           )
         }
-        {item.activityUrl && <a class="button primary full" href={item.activityUrl} target="_blank" rel="noreferrer">Tester l'activite</a>}
+        {item.activityUrl && <a class="button primary full" href={item.activityUrl} target="_blank" rel="noreferrer">Tester l'activité</a>}
         <a class="button secondary full" href={item.sourceUrl} target="_blank" rel="noreferrer">Voir la page WordPress source</a>
       </aside>
     </div>
 
     {item.videoUrl && (
       <section class="video-panel">
-        <h2>Aide video</h2>
-        <iframe src={item.videoUrl} title={`Aide video - ${item.title}`} allowfullscreen></iframe>
+        <h2>Aide vidéo</h2>
+        <iframe src={item.videoUrl} title={`Aide vidéo - ${item.title}`} allowfullscreen></iframe>
       </section>
     )}
   </article>

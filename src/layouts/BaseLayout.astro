@@ -2,15 +2,15 @@
 import "../styles/global.css";
 
 const {
-  title = "Apprenti Geometre mobile",
-  description = "Logiciel de geometrie dynamique - CREM asbl",
+  title = "Apprenti Géomètre mobile",
+  description = "Logiciel de géométrie dynamique - CREM asbl",
 } = Astro.props;
 
 const nav = [
   { href: "/", label: "Accueil" },
   { href: "/prise-en-main/", label: "Prise en main" },
   { href: "/modules/", label: "Modules" },
-  { href: "/sequences/", label: "Sequences" },
+  { href: "/sequences/", label: "Séquences" },
 ];
 ---
 
@@ -26,7 +26,7 @@ const nav = [
     <header class="site-header">
       <a class="brand" href="/">
         <img src="https://agmobile.crem.be/wp-content/uploads/2021/01/cropped-AGmobilelogo.png" alt="" />
-        <span>Apprenti Geometre mobile</span>
+        <span>Apprenti Géomètre mobile</span>
       </a>
       <nav aria-label="Navigation principale">
         {
@@ -44,7 +44,7 @@ const nav = [
     <footer class="site-footer">
       <div>
         <h2>Souhaitez-vous ?</h2>
-        <p>Participer a une formation pour prendre en main le logiciel ou devenir une ecole partenaire.</p>
+        <p>Participer à une formation pour prendre en main le logiciel ou devenir une école partenaire.</p>
         <a href="mailto:info@crem.be">info@crem.be</a>
       </div>
       <div class="footer-logo">
