@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ModuleCard from "../../components/ModuleCard.astro";
+import { modules } from "../../data/site";
+
+const starters = modules.filter((item) => item.themes.includes("Prise en main") || item.themes.includes("Initiation"));
+---
+
+<BaseLayout title="Prise en main - Apprenti Geometre mobile">
+  <section class="page-intro compact">
+    <p class="eyebrow">Demarrer</p>
+    <h1>Prise en main du logiciel</h1>
+    <p>
+      Les premiers modules aident les eleves a comprendre les gestes essentiels : manipuler,
+      construire, deplacer et modifier des figures.
+    </p>
+  </section>
+
+  <section class="split-content">
+    <img src="https://agmobile.crem.be/wp-content/uploads/2021/07/prisemain2.png" alt="Prise en main AGmobile" />
+    <div>
+      <h2>Un micro-monde a explorer</h2>
+      <p>
+        Le logiciel laisse l'initiative a l'utilisateur. La prise en main est donc pensee comme une
+        exploration guidee : on observe, on manipule, puis on formule les proprietes utiles.
+      </p>
+      <a class="button primary" href="https://ag.crem.be/" target="_blank" rel="noreferrer">Ouvrir le logiciel</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Modules d'initiation</p>
+      <h2>Commencer avec les ressources CREM</h2>
+    </div>
+    <div class="card-grid">
+      {starters.map((item) => <ModuleCard item={item} />)}
+    </div>
+  </section>
+</BaseLayout>

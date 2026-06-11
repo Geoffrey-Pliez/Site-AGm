@@ -1,0 +1,26 @@
+---
+const { item } = Astro.props;
+---
+
+<article
+  class="module-card"
+  data-module-card
+  data-title={item.title.toLowerCase()}
+  data-themes={item.themes.join("|")}
+  data-actions={item.actions.join("|")}
+  data-levels={item.levels.join("|")}
+  data-type={item.type}
+>
+  <a class="thumb" href={`/modules/${item.slug}/`} aria-label={`Voir ${item.title}`}>
+    <img src={item.image} alt="" loading="lazy" />
+  </a>
+  <div class="module-body">
+    <p class="eyebrow">{item.type}</p>
+    <h2><a href={`/modules/${item.slug}/`}>{item.title}</a></h2>
+    <p>{item.excerpt}</p>
+    <div class="tags">
+      {item.levels.map((level) => <span>{level}</span>)}
+      {item.themes.slice(0, 2).map((theme) => <span>{theme}</span>)}
+    </div>
+  </div>
+</article>

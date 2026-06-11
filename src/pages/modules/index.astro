@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ModuleCard from "../../components/ModuleCard.astro";
+import { filters, modules } from "../../data/site";
+---
+
+<BaseLayout title="Modules - Apprenti Geometre mobile">
+  <section class="page-intro">
+    <p class="eyebrow">Composer un parcours</p>
+    <h1>Modules et fiches d'activite</h1>
+    <p>
+      La fiche d'activite decrit la tache que l'eleve doit realiser sur le logiciel.
+      Certaines fiches sont associees a des syntheses et a des documents pour la classe.
+    </p>
+  </section>
+
+  <section class="catalog">
+    <aside class="filters" aria-label="Filtres des modules">
+      <label>
+        Recherche
+        <input data-filter-search type="search" placeholder="Titre, objectif..." />
+      </label>
+      <label>
+        Theme
+        <select data-filter="themes">
+          <option value="">Tous les themes</option>
+          {filters.themes.map((theme) => <option value={theme}>{theme}</option>)}
+        </select>
+      </label>
+      <label>
+        Action
+        <select data-filter="actions">
+          <option value="">Toutes les actions</option>
+          {filters.actions.map((action) => <option value={action}>{action}</option>)}
+        </select>
+      </label>
+      <label>
+        Niveau
+        <select data-filter="levels">
+          <option value="">Tous les niveaux</option>
+          {filters.levels.map((level) => <option value={level}>{level}</option>)}
+        </select>
+      </label>
+      <p class="result-count"><span data-result-count>{modules.length}</span> ressources</p>
+    </aside>
+    <div class="catalog-list">
+      {modules.map((item) => <ModuleCard item={item} />)}
+    </div>
+  </section>
+
+  <script>
+    const cards = [...document.querySelectorAll("[data-module-card]")];
+    const selects = [...document.querySelectorAll("[data-filter]")];
+    const search = document.querySelector("[data-filter-search]");
+    const count = document.querySelector("[data-result-count]");
+
+    function updateCards() {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const matchesQuery = !query || card.dataset.title.includes(query) || card.textContent.toLowerCase().includes(query);
+        const matchesSelects = selects.every((select) => {
+          const value = select.value;
+          return !value || card.dataset[select.dataset.filter].split("|").includes(value);
+        });
+        const shouldShow = matchesQuery && matchesSelects;
+        card.hidden = !shouldShow;
+        if (shouldShow) visible += 1;
+      });
+
+      count.textContent = String(visible);
+    }
+
+    selects.forEach((select) => select.addEventListener("change", updateCards));
+    search.addEventListener("input", updateCards);
+  </script>
+</BaseLayout>

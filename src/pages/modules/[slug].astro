@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { modules } from "../../data/site";
+
+export function getStaticPaths() {
+  return modules.map((item) => ({ params: { slug: item.slug }, props: { item } }));
+}
+
+const { item } = Astro.props;
+---
+
+<BaseLayout title={`${item.title} - AGmobile`}>
+  <article class="detail">
+    <header class="detail-header">
+      <div>
+        <p class="eyebrow">{item.type}</p>
+        <h1>{item.title}</h1>
+        <p>{item.excerpt}</p>
+      </div>
+      <img src={item.image} alt="" />
+    </header>
+
+    <div class="detail-grid">
+      <section>
+        <h2>Objectifs</h2>
+        <p>{item.objective}</p>
+        <h2>Resume du module</h2>
+        <p>{item.summary}</p>
+      </section>
+      <aside>
+        <h2>Documents</h2>
+        {
+          item.documents.length ? (
+            <ul class="resource-list">
+              {item.documents.map((doc) => (
+                <li><a href={doc.url} target="_blank" rel="noreferrer">{doc.label}</a></li>
+              ))}
+            </ul>
+          ) : (
+            <p>Documents disponibles depuis la page source.</p>
+          )
+        }
+        {item.activityUrl && <a class="button primary full" href={item.activityUrl} target="_blank" rel="noreferrer">Tester l'activite</a>}
+        <a class="button secondary full" href={item.sourceUrl} target="_blank" rel="noreferrer">Voir la page WordPress source</a>
+      </aside>
+    </div>
+
+    {item.videoUrl && (
+      <section class="video-panel">
+        <h2>Aide video</h2>
+        <iframe src={item.videoUrl} title={`Aide video - ${item.title}`} allowfullscreen></iframe>
+      </section>
+    )}
+  </article>
+</BaseLayout>

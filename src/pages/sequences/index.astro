@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ModuleCard from "../../components/ModuleCard.astro";
+import { sequences } from "../../data/site";
+---
+
+<BaseLayout title="Sequences d'apprentissage - Apprenti Geometre mobile">
+  <section class="page-intro">
+    <p class="eyebrow">Parcours pour la classe</p>
+    <h1>Sequences d'apprentissage</h1>
+    <p>
+      Une sequence construit un ensemble de connaissances ou de savoir-faire par une suite
+      d'activites reparties dans le temps et selectionnees par l'enseignant.
+    </p>
+  </section>
+
+  <section class="split-content">
+    <img src="https://agmobile.crem.be/wp-content/uploads/2021/07/sequences-dapprentissage-1-1024x591.png" alt="Presentation d'une page de sequence AGmobile" />
+    <div>
+      <h2>Utiliser ou creer ses sequences</h2>
+      <p>
+        Les sequences proposees sont des agencements de modules. Elles peuvent aussi servir de
+        base pour composer vos propres parcours en fonction du niveau, du theme et de l'action visee.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Dernieres sequences</p>
+      <h2>Ressources pretes a assembler</h2>
+    </div>
+    <div class="card-grid">
+      {sequences.map((item) => <ModuleCard item={item} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ModuleCard from "../components/ModuleCard.astro";
+import { modules, sequences } from "../data/site";
+
+const featured = modules.slice(0, 3);
+---
+
+<BaseLayout title="Apprenti Geometre mobile - CREM asbl">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Logiciel de geometrie dynamique</p>
+      <h1>Apprenti Geometre mobile</h1>
+      <p>
+        Un micro-monde qui laisse l'initiative a l'enseignant et aux eleves pour travailler
+        la geometrie euclidienne, les grandeurs, les fractions, les mesures et l'arithmetique.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/prise-en-main/">Commencer</a>
+        <a class="button secondary" href="/modules/">Composer une sequence</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <img src="https://agmobile.crem.be/wp-content/uploads/2021/07/prisemain2.png" alt="" />
+    </div>
+  </section>
+
+  <section class="split-band">
+    <div>
+      <h2>Prise en main du logiciel</h2>
+      <p>
+        Retrouvez les premiers gestes, les modules d'initiation et les documents pour installer
+        rapidement une activite en classe.
+      </p>
+    </div>
+    <a class="button primary" href="/prise-en-main/">Explorer</a>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Modules recents</p>
+      <h2>Votre propre sequence d'apprentissage</h2>
+      <p>
+        Filtrez les modules par theme, action ou niveau, puis assemblez-les dans vos cours.
+      </p>
+    </div>
+    <div class="card-grid">
+      {featured.map((item) => <ModuleCard item={item} />)}
+    </div>
+  </section>
+
+  <section class="metrics">
+    <div>
+      <strong>{modules.length}</strong>
+      <span>ressources portees</span>
+    </div>
+    <div>
+      <strong>{sequences.length}</strong>
+      <span>sequences mises en avant</span>
+    </div>
+    <div>
+      <strong>3</strong>
+      <span>facettes de filtrage</span>
+    </div>
+  </section>
+
+  <section class="notice-band">
+    <h2>Informez-nous</h2>
+    <p>
+      Afin d'aider le CREM a evaluer l'impact de ses travaux dans le monde enseignant,
+      vous pouvez signaler chaque utilisation d'une activite.
+    </p>
+    <a class="button secondary" href="https://www.crem.be/feedbacks" target="_blank" rel="noreferrer">Remplir le formulaire</a>
+  </section>
+</BaseLayout>
