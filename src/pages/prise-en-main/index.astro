@@ -1,9 +1,15 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ModuleCard from "../../components/ModuleCard.astro";
-import { modules } from "../../data/site";
+import MigratedContentCard from "../../components/MigratedContentCard.astro";
+import wpData from "../../data/wp-content.json";
 
-const starters = modules.filter((item) => item.themes.includes("Prise en main") || item.themes.includes("Initiation"));
+const starters = wpData.content.filter((item) => {
+  const terms = [
+    ...(item.terms.themes ?? []),
+    ...(item.terms.categories ?? []),
+  ].join(" ").toLowerCase();
+  return terms.includes("prise en main") || terms.includes("initiation") || terms.includes("découvrir");
+});
 ---
 
 <BaseLayout title="Prise en main - Apprenti Géomètre mobile">
@@ -34,7 +40,7 @@ const starters = modules.filter((item) => item.themes.includes("Prise en main") 
       <h2>Commencer avec les ressources CREM</h2>
     </div>
     <div class="card-grid">
-      {starters.map((item) => <ModuleCard item={item} />)}
+      {starters.map((item) => <MigratedContentCard item={item} />)}
     </div>
   </section>
 </BaseLayout>

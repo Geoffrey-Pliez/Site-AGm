@@ -1,0 +1,50 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import wpData from "../data/wp-content.json";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return wpData.content.map((item) => ({
+    params: { path: item.routePath },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const allTerms = [
+  ...(item.terms.niveau ?? []),
+  ...(item.terms.themes ?? []),
+  ...(item.terms.actions ?? []),
+  ...(item.terms.categories ?? []),
+];
+---
+
+<BaseLayout title={`${item.title} - Apprenti Géomètre mobile`} description={item.excerpt || "Contenu migré depuis WordPress AGmobile"}>
+  <article class="wp-page">
+    <header class="wp-header">
+      <p class="eyebrow">{item.type === "post" ? "Article migré" : "Page migrée"}</p>
+      <h1>{item.title}</h1>
+      {item.excerpt && <p>{item.excerpt}</p>}
+      {allTerms.length > 0 && (
+        <div class="tags">
+          {allTerms.slice(0, 8).map((term) => <span>{term}</span>)}
+        </div>
+      )}
+    </header>
+
+    {item.featuredImage && (
+      <figure class="wp-featured">
+        <img src={item.featuredImage.url} alt={item.featuredImage.alt || ""} />
+        {item.featuredImage.caption && <figcaption>{item.featuredImage.caption}</figcaption>}
+      </figure>
+    )}
+
+    <div class="wp-content" set:html={item.contentHtml} />
+
+    <footer class="wp-source">
+      <a class="button secondary" href={item.sourceUrl} target="_blank" rel="noreferrer">Voir la source WordPress</a>
+      <a class="button primary" href="/contenus/">Retour aux contenus</a>
+    </footer>
+  </article>
+</BaseLayout>

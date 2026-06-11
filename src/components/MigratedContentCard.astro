@@ -1,0 +1,34 @@
+---
+const { item } = Astro.props;
+
+const themes = item.terms?.themes ?? [];
+const actions = item.terms?.actions ?? [];
+const levels = item.terms?.niveau ?? [];
+const categories = item.terms?.categories ?? [];
+const image = item.featuredImage?.url;
+---
+
+<article
+  class="module-card migrated-card"
+  data-migrated-card
+  data-title={`${item.title} ${item.excerpt}`.toLowerCase()}
+  data-type={item.type}
+  data-themes={themes.join("|")}
+  data-actions={actions.join("|")}
+  data-levels={levels.join("|")}
+  data-categories={categories.join("|")}
+>
+  <a class="thumb migrated-thumb" href={item.localUrl} aria-label={`Voir ${item.title}`}>
+    {image ? <img src={image} alt={item.featuredImage.alt || ""} loading="lazy" /> : <span>{item.type === "post" ? "Article" : "Page"}</span>}
+  </a>
+  <div class="module-body">
+    <p class="eyebrow">{item.type === "post" ? "Article WordPress" : "Page WordPress"}</p>
+    <h2><a href={item.localUrl}>{item.title}</a></h2>
+    {item.excerpt && <p>{item.excerpt}</p>}
+    <div class="tags">
+      {levels.slice(0, 2).map((level) => <span>{level}</span>)}
+      {themes.slice(0, 2).map((theme) => <span>{theme}</span>)}
+      {actions.slice(0, 1).map((action) => <span>{action}</span>)}
+    </div>
+  </div>
+</article>

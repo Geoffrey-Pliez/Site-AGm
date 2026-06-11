@@ -1,7 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ModuleCard from "../../components/ModuleCard.astro";
-import { filters, modules } from "../../data/site";
+import MigratedContentCard from "../../components/MigratedContentCard.astro";
+import wpData from "../../data/wp-content.json";
+
+const modules = wpData.content.filter((item) => item.type === "post");
+const themes = [...new Set(modules.flatMap((item) => item.terms.themes ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
+const actions = [...new Set(modules.flatMap((item) => item.terms.actions ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
+const levels = [...new Set(modules.flatMap((item) => item.terms.niveau ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
+const categories = [...new Set(modules.flatMap((item) => item.terms.categories ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
 ---
 
 <BaseLayout title="Modules - Apprenti Géomètre mobile">
@@ -24,32 +30,39 @@ import { filters, modules } from "../../data/site";
         Thème
         <select data-filter="themes">
           <option value="">Tous les thèmes</option>
-          {filters.themes.map((theme) => <option value={theme}>{theme}</option>)}
+          {themes.map((theme) => <option value={theme}>{theme}</option>)}
         </select>
       </label>
       <label>
         Action
         <select data-filter="actions">
           <option value="">Toutes les actions</option>
-          {filters.actions.map((action) => <option value={action}>{action}</option>)}
+          {actions.map((action) => <option value={action}>{action}</option>)}
         </select>
       </label>
       <label>
         Niveau
         <select data-filter="levels">
           <option value="">Tous les niveaux</option>
-          {filters.levels.map((level) => <option value={level}>{level}</option>)}
+          {levels.map((level) => <option value={level}>{level}</option>)}
+        </select>
+      </label>
+      <label>
+        Catégorie
+        <select data-filter="categories">
+          <option value="">Toutes les catégories</option>
+          {categories.map((category) => <option value={category}>{category}</option>)}
         </select>
       </label>
       <p class="result-count"><span data-result-count>{modules.length}</span> ressources</p>
     </aside>
     <div class="catalog-list">
-      {modules.map((item) => <ModuleCard item={item} />)}
+      {modules.map((item) => <MigratedContentCard item={item} />)}
     </div>
   </section>
 
   <script>
-    const cards = [...document.querySelectorAll("[data-module-card]")];
+    const cards = [...document.querySelectorAll("[data-migrated-card]")];
     const selects = [...document.querySelectorAll("[data-filter]")];
     const search = document.querySelector("[data-filter-search]");
     const count = document.querySelector("[data-result-count]");
@@ -62,7 +75,7 @@ import { filters, modules } from "../../data/site";
         const matchesQuery = !query || card.dataset.title.includes(query) || card.textContent.toLowerCase().includes(query);
         const matchesSelects = selects.every((select) => {
           const value = select.value;
-          return !value || card.dataset[select.dataset.filter].split("|").includes(value);
+          return !value || (card.dataset[select.dataset.filter] || "").split("|").includes(value);
         });
         const shouldShow = matchesQuery && matchesSelects;
         card.hidden = !shouldShow;

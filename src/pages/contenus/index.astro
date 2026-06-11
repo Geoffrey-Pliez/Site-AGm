@@ -1,0 +1,102 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MigratedContentCard from "../../components/MigratedContentCard.astro";
+import wpData from "../../data/wp-content.json";
+
+const contents = wpData.content;
+const themes = [...new Set(contents.flatMap((item) => item.terms.themes ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
+const actions = [...new Set(contents.flatMap((item) => item.terms.actions ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
+const levels = [...new Set(contents.flatMap((item) => item.terms.niveau ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
+const categories = [...new Set(contents.flatMap((item) => item.terms.categories ?? []))].sort((a, b) => a.localeCompare(b, "fr"));
+---
+
+<BaseLayout title="Tous les contenus migrés - Apprenti Géomètre mobile">
+  <section class="page-intro">
+    <p class="eyebrow">Migration WordPress complète</p>
+    <h1>Tous les contenus</h1>
+    <p>
+      Cette archive reprend les {wpData.counts.posts} articles et {wpData.counts.pages} pages publiés sur
+      l'ancien WordPress AGmobile. Les documents et images restent liés aux ressources publiques du site source.
+    </p>
+  </section>
+
+  <section class="catalog">
+    <aside class="filters" aria-label="Filtres des contenus migrés">
+      <label>
+        Recherche
+        <input data-filter-search type="search" placeholder="Titre, extrait, contenu..." />
+      </label>
+      <label>
+        Type
+        <select data-filter="type">
+          <option value="">Tous les types</option>
+          <option value="post">Articles</option>
+          <option value="page">Pages</option>
+        </select>
+      </label>
+      <label>
+        Thème
+        <select data-filter="themes">
+          <option value="">Tous les thèmes</option>
+          {themes.map((theme) => <option value={theme}>{theme}</option>)}
+        </select>
+      </label>
+      <label>
+        Action
+        <select data-filter="actions">
+          <option value="">Toutes les actions</option>
+          {actions.map((action) => <option value={action}>{action}</option>)}
+        </select>
+      </label>
+      <label>
+        Niveau
+        <select data-filter="levels">
+          <option value="">Tous les niveaux</option>
+          {levels.map((level) => <option value={level}>{level}</option>)}
+        </select>
+      </label>
+      <label>
+        Catégorie
+        <select data-filter="categories">
+          <option value="">Toutes les catégories</option>
+          {categories.map((category) => <option value={category}>{category}</option>)}
+        </select>
+      </label>
+      <p class="result-count"><span data-result-count>{contents.length}</span> contenus</p>
+    </aside>
+
+    <div class="catalog-list">
+      {contents.map((item) => <MigratedContentCard item={item} />)}
+    </div>
+  </section>
+
+  <script>
+    const cards = [...document.querySelectorAll("[data-migrated-card]")];
+    const selects = [...document.querySelectorAll("[data-filter]")];
+    const search = document.querySelector("[data-filter-search]");
+    const count = document.querySelector("[data-result-count]");
+
+    function updateCards() {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const matchesQuery = !query || card.dataset.title.includes(query) || card.textContent.toLowerCase().includes(query);
+        const matchesSelects = selects.every((select) => {
+          const value = select.value;
+          if (!value) return true;
+          const data = card.dataset[select.dataset.filter] || "";
+          return select.dataset.filter === "type" ? data === value : data.split("|").includes(value);
+        });
+        const shouldShow = matchesQuery && matchesSelects;
+        card.hidden = !shouldShow;
+        if (shouldShow) visible += 1;
+      });
+
+      count.textContent = String(visible);
+    }
+
+    selects.forEach((select) => select.addEventListener("change", updateCards));
+    search.addEventListener("input", updateCards);
+  </script>
+</BaseLayout>

@@ -9,3 +9,9 @@ runConfig:
 scripts:
   buildCommand: npm run build
   runCommand: node ./dist/server/entry.mjs
+
+env:
+  - variable: HOST
+    value: "0.0.0.0"
+  - variable: PORT
+    value: "8080"

@@ -1,7 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ModuleCard from "../../components/ModuleCard.astro";
-import { sequences } from "../../data/site";
+import MigratedContentCard from "../../components/MigratedContentCard.astro";
+import wpData from "../../data/wp-content.json";
+
+const sequences = wpData.content.filter((item) => {
+  const categories = item.terms.categories ?? [];
+  return categories.some((category) => category.toLowerCase().includes("séquence"));
+});
 ---
 
 <BaseLayout title="Séquences d'apprentissage - Apprenti Géomètre mobile">
@@ -31,7 +36,7 @@ import { sequences } from "../../data/site";
       <h2>Ressources prêtes à assembler</h2>
     </div>
     <div class="card-grid">
-      {sequences.map((item) => <ModuleCard item={item} />)}
+      {sequences.map((item) => <MigratedContentCard item={item} />)}
     </div>
   </section>
 </BaseLayout>
