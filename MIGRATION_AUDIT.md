@@ -94,7 +94,9 @@ La page d'accueil WordPress est partiellement reprise dans `src/pages/index.astr
 - L'archive `/contenus/` permet de filtrer tous les contenus migres.
 - Les anciennes URLs WordPress non reservees par des pages Astro dediees sont prerenderisees via `src/pages/[...path].astro`.
 - Les URLs reservees par des pages Astro dediees sont conservees en copie sous `/wordpress/...` : par exemple `/wordpress/modules/`, `/wordpress/prise-en-main/` et `/wordpress/accueil/`.
-- Les medias et documents restent distants sur `https://agmobile.crem.be/wp-content/uploads/...` plutot que copies dans `public/`.
+- Les medias et documents sont maintenant copies localement dans `public/wp-content/uploads/`.
+- Les URLs dans le code et les donnees migrees pointent vers ces assets locaux.
+- Une verification des assets manquants a ete effectuee (22 corriges, 5 restant en 404 sur la source ou avec ancres).
 - Les embeds YouTube et liens vers le logiciel AG sont repris dans le HTML WordPress migre.
 
 ## Etat final de cette passe

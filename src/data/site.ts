@@ -1,4 +1,4 @@
-export const assetBase = "https://agmobile.crem.be/wp-content/uploads";
+export const assetBase = "/wp-content/uploads";
 
 export const filters = {
   themes: [

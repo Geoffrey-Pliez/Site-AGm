@@ -143,8 +143,29 @@ function normalizeContent(item, type, termMaps, mediaById) {
     item.title?.rendered || (type === "page" && pathnameFromLink(item.link) === "" ? "Accueil" : "Sans titre"),
   );
   const excerpt = textFromHtml(item.excerpt?.rendered || item.content?.rendered || "").slice(0, 260);
-  const featured = mediaById.get(item.featured_media);
   const routePath = routePathFor(item);
+  const contentHtml = rewriteInternalLinks(item.content?.rendered || "");
+
+  let featured = mediaById.get(item.featured_media);
+  let featuredImage = featured
+    ? {
+        url: localUploadPath(featured.source_url),
+        alt: decodeEntities(featured.alt_text || ""),
+        caption: textFromHtml(featured.caption?.rendered || ""),
+      }
+    : null;
+
+  // Fallback: if no featured image, try to find the first image in the content
+  if (!featuredImage) {
+    const imgMatch = contentHtml.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if (imgMatch) {
+      featuredImage = {
+        url: imgMatch[1],
+        alt: "",
+        caption: "",
+      };
+    }
+  }
 
   return {
     id: item.id,
@@ -159,14 +180,8 @@ function normalizeContent(item, type, termMaps, mediaById) {
     localUrl: `/${routePath}/`,
     parent: item.parent || 0,
     excerpt,
-    contentHtml: rewriteInternalLinks(item.content?.rendered || ""),
-    featuredImage: featured
-      ? {
-          url: localUploadPath(featured.source_url),
-          alt: decodeEntities(featured.alt_text || ""),
-          caption: textFromHtml(featured.caption?.rendered || ""),
-        }
-      : null,
+    contentHtml,
+    featuredImage,
     terms: mapTerms(item, termMaps),
   };
 }
