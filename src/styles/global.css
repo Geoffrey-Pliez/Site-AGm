@@ -569,6 +569,11 @@ select {
   border-radius: 8px;
 }
 
+.wp-content p.has-background {
+  width: 100%;
+  max-width: none;
+}
+
 .wp-content .wp-block-button__link,
 .wp-content input[type="submit"] {
   display: inline-flex;
