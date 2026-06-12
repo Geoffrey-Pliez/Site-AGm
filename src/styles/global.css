@@ -505,6 +505,42 @@ select {
   font-weight: 700;
 }
 
+.wp-content .has-text-align-left {
+  text-align: left;
+}
+
+.wp-content .has-text-align-center {
+  text-align: center;
+}
+
+.wp-content .has-text-align-right {
+  text-align: right;
+}
+
+.wp-content .has-white-color {
+  color: #fff;
+}
+
+.wp-content .has-black-color {
+  color: var(--ink);
+}
+
+.wp-content .has-link-color a {
+  color: #0f5f8c;
+}
+
+.wp-content .has-small-font-size {
+  font-size: 0.875rem;
+}
+
+.wp-content .has-medium-font-size {
+  font-size: 1.125rem;
+}
+
+.wp-content .has-white-background-color {
+  background-color: #fff;
+}
+
 .wp-content img {
   height: auto;
   margin-inline: auto;
