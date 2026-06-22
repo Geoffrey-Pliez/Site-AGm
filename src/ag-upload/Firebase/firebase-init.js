@@ -3,10 +3,35 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { setState } from '../Core/App';
-import config from './firebase-config.json';
 
+const firebaseConfig = {
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+};
 
-const firebaseApp = initializeApp(config);
+const hasExplicitFirebaseConfig = Object.values(firebaseConfig).every(
+  (value) => typeof value === "string" && value.length > 0
+);
+
+const firebaseApp = hasExplicitFirebaseConfig
+  ? initializeApp(firebaseConfig)
+  : (() => {
+      try {
+        return initializeApp();
+      } catch (error) {
+        if (error?.code === "app/no-options") {
+          throw new Error(
+            "Firebase non configure. Renseigne les variables PUBLIC_FIREBASE_* dans .env (local) ou configure App Hosting pour l'autoconfig."
+          );
+        }
+        throw error;
+      }
+    })();
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 setState({ db });

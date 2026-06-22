@@ -3,3 +3,5 @@ dist/
 .astro/
 .env
 .env.*
+!.env.example
+src/ag-upload/Firebase/firebase-config.json
