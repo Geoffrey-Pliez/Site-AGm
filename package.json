@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@astrojs/node": "^10.1.4",
-    "astro": "^6.4.6"
+    "astro": "^6.4.6",
+    "firebase": "^12.15.0",
+    "lit": "^3.3.3"
   }
 }
