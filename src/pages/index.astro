@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ModuleCard from "../components/ModuleCard.astro";
-import { modules, sequences } from "../data/site";
+import { modules } from "../data/site";
 
 const featured = modules.slice(0, 3);
 ---
@@ -49,20 +49,6 @@ const featured = modules.slice(0, 3);
     </div>
   </section>
 
-  <section class="metrics">
-    <div>
-      <strong>{modules.length}</strong>
-      <span>ressources portées</span>
-    </div>
-    <div>
-      <strong>{sequences.length}</strong>
-      <span>séquences mises en avant</span>
-    </div>
-    <div>
-      <strong>3</strong>
-      <span>facettes de filtrage</span>
-    </div>
-  </section>
 
   <section class="notice-band">
     <h2>Informez-nous</h2>
