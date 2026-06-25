@@ -1,19 +1,9 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import AdminLayout from "../../layouts/AdminLayout.astro";
 import aguAppScriptUrl from "../../ag-upload/agu-app.js?url";
 ---
 
-<BaseLayout title="AG-upload | Administration AGm">
-  <style>
-    .admin-suite {
-      min-height: 70vh;
-    }
-    agu-app {
-      display: block;
-    }
-  </style>
-  <div class="admin-suite">
-    <agu-app></agu-app>
-  </div>
+<AdminLayout title="AG-upload | Administration AGm">
+  <agu-app></agu-app>
   <script type="module" src={aguAppScriptUrl}></script>
-</BaseLayout>
+</AdminLayout>
