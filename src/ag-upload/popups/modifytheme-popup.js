@@ -10,7 +10,6 @@ class ModifyThemePopup extends LitElement {
   static get properties() {
     return {
       themeToModify: { type: String },
-      // newThemeName: { type: String },
     };
   }
 
@@ -23,27 +22,22 @@ class ModifyThemePopup extends LitElement {
   static get styles() {
     return [
       TemplatePopup.template_popup_styles(),
-      css`
-      `,
+      css``,
     ];
-  }
-
-  updated() {
-    console.log(this.themeToModify);
   }
 
   render() {
     return html`
       <template-popup>
         <h2 slot="title">Modifier un thème</h2>
-        <div id="" slot="body">
+        <div slot="body">
           <fieldset>
             <legend>Nom du thème</legend>
             ${this.themeToModify} => <input type="text" id="theme" name="theme" placeholder="${this.themeToModify}" @input="${e => this.newThemeName = e.target.value}"/>
           </fieldset>
         </div>
         <div slot="footer">
-          <button id="focus" @click="${() => this.modifyTheme()}">Modifier</button>
+          <button class="btn-primary" id="focus" @click="${() => this.modifyTheme()}">Modifier</button>
         </div>
       </template-popup>
     `;

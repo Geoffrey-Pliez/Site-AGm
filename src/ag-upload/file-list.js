@@ -15,7 +15,6 @@ class FileList extends LitElement {
       filesDisplayed: { type: Array },
       fileEnvironmentToShow: { type: String },
       fileModuleToShow: { type: String },
-      nameSorted: { type: String },
       clipboardText: { type: String },
     };
   }
@@ -30,118 +29,173 @@ class FileList extends LitElement {
     this.fileModuleToShow = app.fileModuleToShow;
     window.addEventListener('fileModuleToShow-changed', () => this.fileModuleToShow = app.fileModuleToShow);
 
-    this.nameSorted = 'notSorted';
-
     this.clipboardText = 'Copier le lien';
   }
 
   static get styles() {
     return css`
-      #table-container {
-        height: calc(100% - 150px);
-        overflow: auto;
-        margin: auto;
-        // margin-top: 10px;
+      .table-wrap {
+        overflow-x: auto;
+        margin: 1rem 0;
       }
 
-      table
-      {
+      table {
+        width: 100%;
         border-collapse: collapse;
-        // border: 1px solid #333;
-        margin: auto;
-        // margin-top: 10px;
-        // margin-bottom: 10px;
-        border-spacing: 0px;
-        width: 1400px;
-        max-width: 90%;
-        box-shadow: 0px 0px 5px grey;
-        // border-radius:  7px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
       }
 
       thead {
         position: sticky;
-        top: 0px;
-        z-index: 10;
+        top: 0;
+        z-index: 5;
       }
 
-      td, th {
-        border-collapse: collapse;
-        padding: 5px 20px;
+      thead th {
+        background: var(--ink);
+        color: white;
+        font-weight: 800;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
       }
 
-      tr {
-        background-color: #bbb;
+      tbody tr {
+        border-bottom: 1px solid var(--line);
+        transition: background 0.12s;
       }
 
-      img.table-item-image {
+      tbody tr:hover {
+        background: var(--paper);
+      }
+
+      tbody td {
+        padding: 0.65rem 1rem;
+        vertical-align: middle;
+      }
+
+      .action-btn {
+        background: none;
+        border: none;
         cursor: pointer;
-        height: 1em;
+        font-size: 1.1rem;
+        padding: 0.25rem 0.4rem;
+        border-radius: 4px;
+        transition: background 0.12s;
       }
 
-      [sorted="notSorted"] {
-        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIUnC2nKLnT4or00PvyrQwrPzUZshQAOw==) no-repeat center right !important;
+      .action-btn:hover {
+        background: var(--paper);
       }
 
-      [sorted="ascending"] {
-        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIRnC2nKLnT4or00Puy3rx7VQAAOw==) no-repeat center right !important;
-      }
-
-      [sorted="descending"] {
-        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIPnI+py+0/hJzz0IruwjsVADs=) no-repeat center right !important;
-      }
-
-      .clipboardContainer {
-        float: right;
+      .clipboard-wrap {
         position: relative;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
       }
 
-      .clipboardContainer .clipboardTooltip {
+      .clipboard-tip {
         visibility: hidden;
-        width: 140px;
-        background-color: #555;
-        color: #fff;
+        width: 120px;
+        background: var(--ink);
+        color: white;
         text-align: center;
         border-radius: 6px;
-        padding: 5px;
+        padding: 4px 8px;
         position: absolute;
         z-index: 11;
-        bottom: 150%;
+        bottom: 140%;
         left: 50%;
-        margin-left: -75px;
+        transform: translateX(-50%);
         opacity: 0;
-        transition: opacity 0.3s;
+        transition: opacity 0.2s;
+        font-size: 0.82rem;
+        font-weight: 600;
+        pointer-events: none;
       }
 
-      .clipboardContainer .clipboardTooltip::after {
+      .clipboard-tip::after {
         content: "";
         position: absolute;
         top: 100%;
         left: 50%;
         margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: #555 transparent transparent transparent;
+        border: 5px solid transparent;
+        border-top-color: var(--ink);
       }
 
-      .clipboardContainer:hover .clipboardTooltip {
+      .clipboard-wrap:hover .clipboard-tip {
         visibility: visible;
         opacity: 1;
       }
 
-      a {
-        color: blue;
+      a.file-link {
+        color: #0f5f8c;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 0.9rem;
       }
 
-      a:visited {
-        color: blue;
+      a.file-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+          display: block;
+        }
+
+        thead {
+          display: none;
+        }
+
+        tbody tr {
+          margin-bottom: 0.75rem;
+          border: 1px solid var(--line);
+          border-radius: 8px;
+          background: var(--surface);
+          padding: 0.5rem 0;
+        }
+
+        tbody tr:hover {
+          background: var(--surface);
+        }
+
+        tbody td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.4rem 1rem;
+          border-bottom: 1px solid var(--line);
+        }
+
+        tbody td:last-child {
+          border-bottom: none;
+        }
+
+        tbody td::before {
+          content: attr(data-label);
+          font-weight: 700;
+          font-size: 0.82rem;
+          color: var(--ink-soft);
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
       }
     `
   }
 
   copyToClipboard(event) {
     this.clipboardText = 'Lien copié !';
-    navigator.clipboard.writeText(event.target.parentNode.parentNode.querySelector("a").href);
+    navigator.clipboard.writeText(event.currentTarget.parentNode.querySelector("a").href);
+    setTimeout(() => this.clipboardText = 'Copier le lien', 2000);
   }
 
   openModifyFilePopup(fileName, moduleName) {
@@ -153,20 +207,6 @@ class FileList extends LitElement {
     elem.oldModuleName = moduleName;
   }
 
-  // sortByName() {
-  //   if (this.nameSorted != 'ascending') {
-  //     this.nameSorted = 'ascending';
-  //     this.filesDisplayed.sort((file1, file2) => {
-  //       return file1.id.localeCompare(file2.id)
-  //     });
-  //   } else {
-  //     this.nameSorted = 'descending';
-  //     this.filesDisplayed.sort((file1, file2) => {
-  //       return file2.id.localeCompare(file1.id)
-  //     });
-  //   }
-  // }
-
   async deleteFileFromModule(fileDoc, moduleName) {
     updateDoc(doc(app.db, "modules", moduleName), {
       files: arrayRemove(fileDoc)
@@ -177,7 +217,7 @@ class FileList extends LitElement {
     if (!requireAuthenticatedUser()) {
       return;
     }
-    if (confirm('Etes-vous sûr de vouloir supprimer le fichier ' + fileName + ' ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer le fichier ' + fileName + ' ?')) {
       const fileDoc = doc(app.db, "files", fileName);
       deleteDoc(fileDoc);
       this.deleteFileFromModule(fileDoc, moduleName);
@@ -189,71 +229,49 @@ class FileList extends LitElement {
   }
 
   render() {
-    return [
-      html`
-        <div id="table-container">
-          <table>
-            <thead>
+    return html`
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom du fichier</th>
+              <th>Lien</th>
+              <th>Environnement</th>
+              <th>Module</th>
+              <th>Modifier</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${this.filesDisplayed
+              .filter(fileDisplayed => this.fileEnvironmentToShow == 'Tous les environnements' || fileDisplayed.environment == this.fileEnvironmentToShow)
+              .filter(fileDisplayed => this.fileModuleToShow == 'Tous les modules' || fileDisplayed.module.id == this.fileModuleToShow)
+              .map(fileDisplayed => html`
               <tr>
-                <th>
-                  <!-- @click="${this.sortByName}"
-                  id="title" class="noselect sortable" sorted="${this.nameSorted}"> -->
-                  Nom du fichier
-                </th>
-                <th>
-                  Lien
-                </th>
-                <th>
-                  Environnement
-                </th>
-                <th>
-                  Module
-                </th>
-                <th>
-                  Modifier
-                </th>
-                <th>
-                  Supprimer
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              ${this.filesDisplayed
-                .filter(fileDisplayed => this.fileEnvironmentToShow == 'Tous les environnements' || fileDisplayed.environment == this.fileEnvironmentToShow)
-                .filter(fileDisplayed => this.fileModuleToShow == 'Tous les modules' || fileDisplayed.module.id == this.fileModuleToShow)
-                .map((fileDisplayed, idx) => html`
-                <tr style="background-color: ${idx % 2 ? '#ddd' : '#fff'}">
-                  <td>
-                    ${fileDisplayed.id}
-                  </td>
-                  <td>
-                    <a target="_blank" href="${'https://ag.crem.be/?activityName=' + fileDisplayed.id}">
-                      ${'ag.crem.be/?activityName=' + fileDisplayed.id}
+                <td data-label="Fichier">${fileDisplayed.id}</td>
+                <td data-label="Lien">
+                  <div class="clipboard-wrap">
+                    <a class="file-link" target="_blank" href="${'https://ag.crem.be/?activityName=' + fileDisplayed.id}">
+                      ag.crem.be/?activityName=${fileDisplayed.id}
                     </a>
-                    <div class="clipboardContainer">
-                      <span class="clipboardTooltip">${this.clipboardText}</span>
-                      <img class="table-item-image" style="float: right; z-index: 1;" src="images/copyToClipboard.png" @click="${this.copyToClipboard}" @mouseout="${() => this.clipboardText = 'Copier le lien'}" />
-                    </div>
-                  </td>
-                  <td>
-                    ${fileDisplayed.environment}
-                  </td>
-                  <td>
-                    ${fileDisplayed.module.id}
-                  </td>
-                  <td>
-                    <img class="table-item-image" src='images/modify.png' @click="${() => this.openModifyFilePopup(fileDisplayed.id, fileDisplayed.module.id)}"/>
-                  </td>
-                  <td>
-                    <img class="table-item-image" src='images/delete.png' @click="${() => this.checkFileForDelete(fileDisplayed.id, fileDisplayed.module.id)}"/>
-                  </td>
-                </tr>
-              `)}
-            </tbody>
-          </table>
-        </div>
-      `
-    ]
+                    <button class="action-btn" @click="${this.copyToClipboard}" @mouseout="${() => this.clipboardText = 'Copier le lien'}" title="Copier le lien">📋</button>
+                    <span class="clipboard-tip">${this.clipboardText}</span>
+                  </div>
+                </td>
+                <td data-label="Environnement">${fileDisplayed.environment}</td>
+                <td data-label="Module">${fileDisplayed.module.id}</td>
+                <td data-label="Modifier">
+                  <button class="action-btn" @click="${() => this.openModifyFilePopup(fileDisplayed.id, fileDisplayed.module.id)}" title="Modifier">✏️</button>
+                </td>
+                <td data-label="Supprimer">
+                  <button class="action-btn" @click="${() => this.checkFileForDelete(fileDisplayed.id, fileDisplayed.module.id)}" title="Supprimer">🗑️</button>
+                </td>
+              </tr>
+            `)}
+          </tbody>
+        </table>
+      </div>
+    `
   }
 
 }

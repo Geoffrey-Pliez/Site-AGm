@@ -16,7 +16,6 @@ class AddFilePopup extends LitElement {
   constructor() {
     super();
 
-
     this.allModules = app.modules;
     window.addEventListener('modules-changed', () => this.allModules = app.modules)
 
@@ -26,15 +25,8 @@ class AddFilePopup extends LitElement {
   static get styles() {
     return [
       TemplatePopup.template_popup_styles(),
-      css`
-        input[type=file] {
-          margin: auto;
-        }
-      `,
+      css``,
     ];
-  }
-
-  updated() {
   }
 
   changeModuleSelected(e) {
@@ -49,19 +41,20 @@ class AddFilePopup extends LitElement {
     return html`
       <template-popup>
         <h2 slot="title">Ajouter un fichier</h2>
-        <div id="" slot="body">
-
-          <label for="file">Fichier</label>
-          <input @change="${this.changeFileSelected}" multiple id="file" type="file" name="file"/>
-
-          <label for="module">Module</label>
-          <select @change="${this.changeModuleSelected}" id="module" name="module">
-            ${this.allModules.map(module => html`<option value="${module.id}">${module.id}</option>`)}
-          </select>
-
+        <div slot="body">
+          <div class="field-row">
+            <label for="file">Fichier</label>
+            <input @change="${this.changeFileSelected}" multiple id="file" type="file" name="file"/>
+          </div>
+          <div class="field-row">
+            <label for="module">Module</label>
+            <select @change="${this.changeModuleSelected}" id="module" name="module">
+              ${this.allModules.map(module => html`<option value="${module.id}">${module.id}</option>`)}
+            </select>
+          </div>
         </div>
         <div slot="footer">
-          <button id="focus" @click="${() => this.sendFile()}">Envoyer</button>
+          <button class="btn-primary" id="focus" @click="${() => this.sendFile()}">Envoyer</button>
         </div>
       </template-popup>
     `;

@@ -50,45 +50,155 @@ class AguApp extends LitElement {
 
   static get styles() {
     return css`
-      .not-table-elements {
-        height: 150px;
-        width: 1400px;
-        max-width: 90%;
-        margin: auto;
-      }
-
-      .element-choice-container {
+      .admin-bar {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 1rem;
       }
 
-      .element-choice {
-        width: 33.3333%;
-        border: none;
-        border-radius: 5px;
-        box-shadow: 0px 0px 2px grey;
+      .admin-bar a {
+        text-decoration: none;
+        font-weight: 700;
       }
 
-      legend {
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, 0.5);
+      .admin-bar a:hover {
+        text-decoration: underline;
       }
 
-      .element-choice-selected {
-        background-color: #e9e9e9;
-        box-shadow: inset 0px 0px 3px grey;
+      .admin-tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
       }
 
-      button {
+      .admin-tab {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.25rem;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        background: var(--surface);
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .admin-tab:hover {
+        background: var(--paper);
+      }
+
+      .admin-tab-selected {
+        background: var(--ink);
+        color: white;
+      }
+
+      .admin-tab-selected:hover {
+        background: var(--ink-soft);
+      }
+
+      .admin-tab label {
+        font-weight: 800;
         cursor: pointer;
       }
 
-      a {
-        color: blue;
+      .admin-tab input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--ink);
+        border-radius: 50%;
+        margin: 0;
+        flex-shrink: 0;
+        transition: border-color 0.15s, background 0.15s;
+      }
+
+      .admin-tab-selected input[type="radio"] {
+        border-color: white;
+        background: var(--mint);
+      }
+
+      .admin-tab button {
+        padding: 0.35rem 0.7rem;
+        border: 2px solid var(--ink);
+        border-radius: 6px;
+        background: var(--sun);
+        color: var(--ink);
+        font-weight: 800;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: transform 0.1s, filter 0.1s;
+      }
+
+      .admin-tab button:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+      }
+
+      .admin-tab-selected button {
+        border-color: white;
+        background: var(--mint);
+        color: var(--ink);
+      }
+
+      .admin-tab button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+        filter: none;
+      }
+
+      .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+      }
+
+      .filter-row label {
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+
+      .filter-row select {
+        min-height: 38px;
+        padding: 0.4rem 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        color: var(--ink);
+        font: inherit;
+        background: var(--surface);
         cursor: pointer;
       }
 
-      a:visited {
-        color: blue;
+      .auth-link {
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .auth-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .admin-bar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .admin-tabs {
+          flex-direction: column;
+        }
+        .filter-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
       }
     `
   }
@@ -145,7 +255,7 @@ class AguApp extends LitElement {
 
   showElement() {
     if (!this.user) {
-      return html`<p>Connectez-vous pour gérer les thèmes, modules et fichiers.</p>`;
+      return html`<p style="padding: 2rem 0; color: var(--ink-soft);"><strong>Connectez-vous</strong> pour gérer les thèmes, modules et fichiers.</p>`;
     }
 
     switch (this.elementTypeToShow) {
@@ -156,70 +266,52 @@ class AguApp extends LitElement {
       case 'files':
         return html`<file-list></file-list>`;
       default:
-        return html``;
+        return html`<p style="padding: 2rem 0; color: var(--ink-soft);">Sélectionnez une catégorie ci-dessus.</p>`;
     }
   }
 
   render() {
-    return [
-      html`
-        <div class="not-table-elements">
-          ${this.user ? html`<a @click="${() => this.signOut()}">Se déconnecter</a> (${this.user.email})` : html`<a @click="${() => createElem('sign-in')}">Se connecter</a>`}
-
-          <div class="element-choice-container">
-            <fieldset class="element-choice ${this.elementTypeToShow == 'themes' ? 'element-choice-selected' : ''}">
-              <legend>Thèmes</legend>
-              <input ?disabled="${!this.user}" type="radio" name="elementTypeToShow" id="themes" value="themes" @change="${this.changeElementTypeToShow}">
-              <label for="themes">Afficher les thèmes</label>
-              <button ?disabled="${!this.user}" @click="${this.openAddThemePopup}">
-                Ajouter un thème
-              </button>
-            </fieldset>
-            <fieldset class="element-choice ${this.elementTypeToShow == 'modules' ? 'element-choice-selected' : ''}">
-              <legend>Modules</legend>
-              <input ?disabled="${!this.user}" type="radio" name="elementTypeToShow" id="modules" value="modules" @change="${this.changeElementTypeToShow}">
-              <label for="modules">Afficher les modules</label>
-              <button ?disabled="${!this.user}" @click="${this.openAddModulePopup}">
-                Ajouter un module
-              </button>
-
-              <br>
-
-              Filtrer par
-
-              <br>
-
-              <select ?disabled="${!this.user}" style="width:49%" name="themeToShow" id="themeToShow" @change="${this.changeThemeShown}">
+    return html`
+      <div class="admin-bar">
+        <div class="admin-tabs">
+          <div class="admin-tab ${this.elementTypeToShow == 'themes' ? 'admin-tab-selected' : ''}">
+            <input ?disabled="${!this.user}" type="radio" name="elementTypeToShow" id="themes" value="themes" @change="${this.changeElementTypeToShow}">
+            <label for="themes">Thèmes</label>
+            <button ?disabled="${!this.user}" @click="${this.openAddThemePopup}">+ Ajouter</button>
+          </div>
+          <div class="admin-tab ${this.elementTypeToShow == 'modules' ? 'admin-tab-selected' : ''}">
+            <input ?disabled="${!this.user}" type="radio" name="elementTypeToShow" id="modules" value="modules" @change="${this.changeElementTypeToShow}">
+            <label for="modules">Modules</label>
+            <button ?disabled="${!this.user}" @click="${this.openAddModulePopup}">+ Ajouter</button>
+            <div class="filter-row">
+              <label for="themeToShow">Filtrer par thème</label>
+              <select ?disabled="${!this.user}" name="themeToShow" id="themeToShow" @change="${this.changeThemeShown}">
                 ${this.allThemes.map(theme => html`<option value="${theme.id}">${theme.id}</option>`)}
               </select>
-            </fieldset>
-            <fieldset class="element-choice ${this.elementTypeToShow == 'files' ? 'element-choice-selected' : ''}">
-              <legend>Fichiers</legend>
-              <input ?disabled="${!this.user}" type="radio" name="elementTypeToShow" id="files" value="files" @change="${this.changeElementTypeToShow}">
-              <label for="files">Afficher les fichiers</label>
-              <button ?disabled="${!this.user}" @click="${this.openAddFilePopup}">
-                Ajouter un fichier
-              </button>
-
-              <br>
-
-              Filtrer par
-
-              <br>
-
-              <select ?disabled="${!this.user}" style="width:49%" name="environmentToShow" id="environmentToShow" @change="${this.changeEnvironmentShown}">
+            </div>
+          </div>
+          <div class="admin-tab ${this.elementTypeToShow == 'files' ? 'admin-tab-selected' : ''}">
+            <input ?disabled="${!this.user}" type="radio" name="elementTypeToShow" id="files" value="files" @change="${this.changeElementTypeToShow}">
+            <label for="files">Fichiers</label>
+            <button ?disabled="${!this.user}" @click="${this.openAddFilePopup}">+ Ajouter</button>
+            <div class="filter-row">
+              <label for="environmentToShow">Filtrer par</label>
+              <select ?disabled="${!this.user}" name="environmentToShow" id="environmentToShow" @change="${this.changeEnvironmentShown}">
                 ${this.allEnvironments.map(environment => html`<option value="${environment}">${environment}</option>`)}
               </select>
-
-              <select ?disabled="${!this.user}" style="width: 49%; float: right;" @change="${this.changeModuleShown}">
+              <select ?disabled="${!this.user}" @change="${this.changeModuleShown}">
                 ${this.allModules.map(module => html`<option value="${module.id}">${module.id}</option>`)}
               </select>
-            </fieldset>
+            </div>
           </div>
         </div>
-      `,
-      this.showElement()
-    ];
+        <div>
+          ${this.user ? html`<a class="auth-link" @click="${() => this.signOut()}">Se déconnecter</a> <span style="color: var(--ink-soft); font-size: 0.85rem;">(${this.user.email})</span>` : html`<a class="auth-link" @click="${() => createElem('sign-in')}">Se connecter</a>`}
+        </div>
+      </div>
+
+      ${this.showElement()}
+    `;
   }
 
   signOut() {

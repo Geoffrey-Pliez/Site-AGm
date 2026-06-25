@@ -27,8 +27,7 @@ class ModifyFilePopup extends LitElement {
   static get styles() {
     return [
       TemplatePopup.template_popup_styles(),
-      css`
-      `,
+      css``,
     ];
   }
 
@@ -48,7 +47,7 @@ class ModifyFilePopup extends LitElement {
     return html`
       <template-popup>
         <h2 slot="title">Modifier un fichier</h2>
-        <div id="" slot="body">
+        <div slot="body">
           <fieldset>
             <legend>Nom du fichier</legend>
             ${this.fileToModify} => <input type="text" id="filename" name="filename" placeholder="${this.fileToModify}" @input="${e => this.newFileName = e.target.value}"/>
@@ -63,7 +62,7 @@ class ModifyFilePopup extends LitElement {
           </fieldset>
         </div>
         <div slot="footer">
-          <button id="focus" @click="${() => this.modifyFile()}">Modifier</button>
+          <button class="btn-primary" id="focus" @click="${() => this.modifyFile()}">Modifier</button>
         </div>
       </template-popup>
     `;
@@ -100,7 +99,6 @@ class ModifyFilePopup extends LitElement {
     let mustUpdateUI = false;
 
     if (this.newFileName && this.newFileName != "" && this.newFileName != this.fileToModify) {
-      // create new and delete old document in db
       const oldFileDoc = doc(app.db, "files", this.fileToModify);
       let docSnap = getDoc(oldFileDoc);
       const newFileDoc = doc(app.db, "files", this.newFileName);
@@ -112,20 +110,17 @@ class ModifyFilePopup extends LitElement {
       await setDoc(newFileDoc, docData);
       deleteDoc(oldFileDoc);
 
-      // replace file to change name
       const fileBlob = await this.downloadFile(this.fileToModify);
       await this.uploadFile(this.newFileName, fileBlob);
       deleteObject(ref(app.storage, this.fileToModify));
 
       mustUpdateUI = true;
     } else if (this.fileSelected) {
-      // read file
       let filename = this.fileSelected.name;
       let fileContent = await this.fileSelected.text();
       let fileContentObject = JSON.parse(fileContent);
       this.newFileName = filename;
 
-      // create new and delete old document in db
       const oldFileDoc = doc(app.db, "files", this.fileToModify);
       let docSnap = getDoc(oldFileDoc);
       const newFileDoc = doc(app.db, "files", filename);
@@ -139,7 +134,6 @@ class ModifyFilePopup extends LitElement {
       await deleteDoc(oldFileDoc);
       await setDoc(newFileDoc, docData);
 
-      // upload new and delete old file
       const storageRef = ref(app.storage, filename);
       await deleteObject(ref(app.storage, this.fileToModify));
       await uploadBytes(storageRef, this.fileSelected);

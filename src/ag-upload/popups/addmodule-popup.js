@@ -24,12 +24,8 @@ class AddModulePopup extends LitElement {
   static get styles() {
     return [
       TemplatePopup.template_popup_styles(),
-      css`
-      `,
+      css``,
     ];
-  }
-
-  updated() {
   }
 
   changeThemeSelected(e) {
@@ -44,17 +40,20 @@ class AddModulePopup extends LitElement {
     return html`
       <template-popup>
         <h2 slot="title">Ajouter un module</h2>
-        <div id="" slot="body">
-          <label for="module">Nom du module</label>
-          <input @input="${this.changeModuleWritten}" type="text" id="module" name="module" />
-
-          <label for="theme">Thème</label>
-          <select @change="${this.changeThemeSelected}" id="theme" name="theme">
-            ${this.allThemes.map(theme => html`<option value="${theme.id}">${theme.id}</option>`)}
-          </select>
+        <div slot="body">
+          <div class="field-row">
+            <label for="module">Nom du module</label>
+            <input @input="${this.changeModuleWritten}" type="text" id="module" name="module" />
+          </div>
+          <div class="field-row">
+            <label for="theme">Thème</label>
+            <select @change="${this.changeThemeSelected}" id="theme" name="theme">
+              ${this.allThemes.map(theme => html`<option value="${theme.id}">${theme.id}</option>`)}
+            </select>
+          </div>
         </div>
         <div slot="footer">
-          <button id="focus" @click="${() => this.sendModule()}">Ajouter</button>
+          <button class="btn-primary" id="focus" @click="${() => this.sendModule()}">Ajouter</button>
         </div>
       </template-popup>
     `;
@@ -72,7 +71,7 @@ class AddModulePopup extends LitElement {
       updateModules();
       updateThemes();
     } else {
-      alert("remplir le champ nom du module");
+      alert("Remplissez le champ nom du module");
       return;
     }
 

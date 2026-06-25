@@ -26,8 +26,7 @@ class ModifyModulePopup extends LitElement {
   static get styles() {
     return [
       TemplatePopup.template_popup_styles(),
-      css`
-      `,
+      css``,
     ];
   }
 
@@ -43,7 +42,7 @@ class ModifyModulePopup extends LitElement {
     return html`
       <template-popup>
         <h2 slot="title">Modifier un module</h2>
-        <div id="" slot="body">
+        <div slot="body">
           <fieldset>
             <legend>Nom du module</legend>
             ${this.moduleToModify} => <input type="text" id="module" name="module" placeholder="${this.moduleToModify}" @input="${e => this.newModuleName = e.target.value}"/>
@@ -57,7 +56,7 @@ class ModifyModulePopup extends LitElement {
           </fieldset>
         </div>
         <div slot="footer">
-          <button id="focus" @click="${() => this.modifyModule()}">Modifier</button>
+          <button class="btn-primary" id="focus" @click="${() => this.modifyModule()}">Modifier</button>
         </div>
       </template-popup>
     `;

@@ -13,8 +13,6 @@ class ModuleList extends LitElement {
     return {
       modulesDisplayed: { type: Array },
       moduleThemeToShow: { type: String }
-      // nameSorted: { type: String },
-      // clipboardText: { type: String },
     };
   }
 
@@ -25,113 +23,125 @@ class ModuleList extends LitElement {
 
     this.moduleThemeToShow = app.moduleThemeToShow;
     window.addEventListener('moduleThemeToShow-changed', () => this.moduleThemeToShow = app.moduleThemeToShow);
-
-    // this.nameSorted = 'notSorted';
-    // this.clipboardText = 'Copier le lien';
   }
 
   static get styles() {
     return css`
-      #table-container {
-        height: calc(100% - 150px);
-        overflow: auto;
-        margin: auto;
-        // margin-top: 10px;
+      .table-wrap {
+        overflow-x: auto;
+        margin: 1rem 0;
       }
 
-      table
-      {
+      table {
+        width: 100%;
         border-collapse: collapse;
-        // border: 1px solid #333;
-        margin: auto;
-        // margin-top: 10px;
-        // margin-bottom: 10px;
-        border-spacing: 0px;
-        width: 1400px;
-        max-width: 90%;
-        box-shadow: 0px 0px 5px grey;
-        // border-radius:  7px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
       }
 
       thead {
         position: sticky;
-        top: 0px;
-        z-index: 10;
+        top: 0;
+        z-index: 5;
       }
 
-      td, th {
-        border-collapse:collapse;
-        // border-right: solid 0.5px #333;
-        // border-left: solid 0.5px #333;
-        padding: 5px 20px;
+      thead th {
+        background: var(--ink);
+        color: white;
+        font-weight: 800;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
       }
 
-      tr {
-        background-color: #bbb;
+      tbody tr {
+        border-bottom: 1px solid var(--line);
+        transition: background 0.12s;
       }
 
-      img.table-item-image {
+      tbody tr:hover {
+        background: var(--paper);
+      }
+
+      tbody td {
+        padding: 0.65rem 1rem;
+        vertical-align: middle;
+      }
+
+      .action-btn {
+        background: none;
+        border: none;
         cursor: pointer;
-        height: 1em;
+        font-size: 1.1rem;
+        padding: 0.25rem 0.4rem;
+        border-radius: 4px;
+        transition: background 0.12s;
       }
 
-      [sorted="notSorted"] {
-        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIUnC2nKLnT4or00PvyrQwrPzUZshQAOw==) no-repeat center right !important;
+      .action-btn:hover {
+        background: var(--paper);
       }
 
-      [sorted="ascending"] {
-        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIRnC2nKLnT4or00Puy3rx7VQAAOw==) no-repeat center right !important;
+      .files-list {
+        font-size: 0.85rem;
+        color: var(--ink-soft);
+        max-width: 320px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      [sorted="descending"] {
-        background:url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIPnI+py+0/hJzz0IruwjsVADs=) no-repeat center right !important;
-      }
+      @media (max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+          display: block;
+        }
 
-      .clipboardContainer {
-        float: right;
-        position: relative;
-        display: inline-block;
-      }
+        thead {
+          display: none;
+        }
 
-      .clipboardContainer .clipboardTooltip {
-        visibility: hidden;
-        width: 140px;
-        background-color: #555;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px;
-        position: absolute;
-        z-index: 11;
-        bottom: 150%;
-        left: 50%;
-        margin-left: -75px;
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
+        tbody tr {
+          margin-bottom: 0.75rem;
+          border: 1px solid var(--line);
+          border-radius: 8px;
+          background: var(--surface);
+          padding: 0.5rem 0;
+        }
 
-      .clipboardContainer .clipboardTooltip::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: #555 transparent transparent transparent;
-      }
+        tbody tr:hover {
+          background: var(--surface);
+        }
 
-      .clipboardContainer:hover .clipboardTooltip {
-        visibility: visible;
-        opacity: 1;
-      }
+        tbody td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.4rem 1rem;
+          border-bottom: 1px solid var(--line);
+        }
 
-      a {
-        color: blue;
-      }
+        tbody td:last-child {
+          border-bottom: none;
+        }
 
-      a:visited {
-        color: blue;
+        tbody td::before {
+          content: attr(data-label);
+          font-weight: 700;
+          font-size: 0.82rem;
+          color: var(--ink-soft);
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+
+        .files-list {
+          max-width: none;
+          white-space: normal;
+        }
       }
     `
   }
@@ -159,7 +169,7 @@ class ModuleList extends LitElement {
     const q = query(collection(app.db, "files"), where("module", "==", moduleDoc));
     const querySnapshot = await getDocs(q);
     if (querySnapshot.size == 0) {
-      if (confirm('Etes-vous sûr de vouloir supprimer le module ' + moduleName + ' ?')) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer le module ' + moduleName + ' ?')) {
         deleteDoc(moduleDoc);
         this.deleteModuleFromTheme(moduleDoc, themeName);
         updateModules();
@@ -171,56 +181,38 @@ class ModuleList extends LitElement {
   }
 
   render() {
-    return [
-      html`
-        <div id="table-container">
-          <table>
-            <thead>
+    return html`
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom du module</th>
+              <th>Thème</th>
+              <th>Fichiers</th>
+              <th>Modifier</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${this.modulesDisplayed
+              .filter(moduleDisplayed => this.moduleThemeToShow == 'Tous les thèmes' || moduleDisplayed.theme.id == this.moduleThemeToShow)
+              .map(moduleDisplayed => html`
               <tr>
-                <th>
-                  Nom du module
-                </th>
-                <th>
-                  Thème
-                </th>
-                <th>
-                  Fichiers
-                </th>
-                <th>
-                  Modifier
-                </th>
-                <th>
-                  Supprimer
-                </th>
+                <td data-label="Module">${moduleDisplayed.id}</td>
+                <td data-label="Thème">${moduleDisplayed.theme.id}</td>
+                <td data-label="Fichiers"><span class="files-list">${moduleDisplayed.files.sort((file1, file2) => file1.id > file2.id ? 1 : -1).map(file => file.id).join(', ')}</span></td>
+                <td data-label="Modifier">
+                  <button class="action-btn" @click="${() => this.openModifyModulePopup(moduleDisplayed.id, moduleDisplayed.theme.id)}" title="Modifier">✏️</button>
+                </td>
+                <td data-label="Supprimer">
+                  <button class="action-btn" @click="${() => this.checkModuleForDelete(moduleDisplayed.id, moduleDisplayed.theme.id)}" title="Supprimer">🗑️</button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              ${this.modulesDisplayed
-                .filter(moduleDisplayed => this.moduleThemeToShow == 'Tous les thèmes' || moduleDisplayed.theme.id == this.moduleThemeToShow)
-                .map((moduleDisplayed, idx) => html`
-                <tr style="background-color: ${idx % 2 ? '#ddd' : '#fff'}">
-                  <td>
-                    ${moduleDisplayed.id}
-                  </td>
-                  <td>
-                    ${moduleDisplayed.theme.id}
-                  </td>
-                  <td>
-                    ${moduleDisplayed.files.sort((file1, file2) => file1.id > file2.id ? 1 : -1).map(file => file.id).join(', ')}
-                  </td>
-                  <td>
-                    <img class="table-item-image" src='images/modify.png' @click="${() => this.openModifyModulePopup(moduleDisplayed.id, moduleDisplayed.theme.id)}" />
-                  </td>
-                  <td>
-                    <img class="table-item-image" src='images/delete.png' @click="${() => this.checkModuleForDelete(moduleDisplayed.id, moduleDisplayed.theme.id)}"/>
-                  </td>
-                </tr>
-              `)}
-            </tbody>
-          </table>
-        </div>
-      `
-    ]
+            `)}
+          </tbody>
+        </table>
+      </div>
+    `
   }
 
 }

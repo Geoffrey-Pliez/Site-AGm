@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permissionRules" : [
+    {
+      "permission" : "edit",
+      "action": "allow",
+      "pattern" : "*"
+    }
+  ]
+}
