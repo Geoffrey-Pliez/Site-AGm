@@ -7,7 +7,7 @@ runConfig:
   concurrency: 80
 
 scripts:
-  buildCommand: npm run build
+  buildCommand: pnpm run build
   runCommand: node ./dist/server/entry.mjs
 
 env:

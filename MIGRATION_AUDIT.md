@@ -104,5 +104,5 @@ La page d'accueil WordPress est partiellement reprise dans `src/pages/index.astr
 - 31 articles WordPress migres.
 - 28 pages WordPress migrees.
 - 272 medias publics references par l'API au moment de la migration.
-- Build Astro verifie avec `npm run build`.
+- Build Astro verifie avec `pnpm run build`.
 - Routes controlees en HTTP : `/contenus/`, `/fractionner/`, `/2025/12/09/geoplan-physique-et-numerique-a-partir-de-5-ans/`.

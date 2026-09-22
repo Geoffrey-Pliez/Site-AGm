@@ -1,10 +1,10 @@
 import { defineConfig } from "astro/config";
-import node from "@astrojs/node";
+import apphosting from "@apphosting/astro-adapter";
 
 export default defineConfig({
   site: "https://agmobile.crem.be",
   output: "server",
-  adapter: node({
+  adapter: apphosting({
     mode: "standalone",
   }),
 });
