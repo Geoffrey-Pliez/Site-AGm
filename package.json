@@ -16,5 +16,8 @@
     "astro": "^6.4.6",
     "firebase": "^12.15.0",
     "lit": "^3.3.3"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.32.1"
   }
 }
