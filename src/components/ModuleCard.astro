@@ -1,5 +1,7 @@
 ---
 const { item } = Astro.props;
+const levels: string[] = item.levels ?? [];
+const themes: string[] = item.themes ?? [];
 ---
 
 <article
@@ -19,8 +21,8 @@ const { item } = Astro.props;
     <h2><a href={`/modules/${item.slug}/`}>{item.title}</a></h2>
     <p>{item.excerpt}</p>
     <div class="tags">
-      {item.levels.map((level) => <span>{level}</span>)}
-      {item.themes.slice(0, 2).map((theme) => <span>{theme}</span>)}
+      {levels.map((level) => <span>{level}</span>)}
+      {themes.slice(0, 2).map((theme) => <span>{theme}</span>)}
     </div>
   </div>
 </article>
