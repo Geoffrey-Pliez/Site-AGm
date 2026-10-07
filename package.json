@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@apphosting/astro-adapter": "^0.0.2",
-    "@astrojs/node": "^10.1.4",
-    "astro": "^6.4.6",
+    "@astrojs/node": "^11.1.7",
+    "astro": "^7.3.5",
     "firebase": "^12.15.0",
     "lit": "^3.3.3"
   },
