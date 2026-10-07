@@ -62,20 +62,20 @@ const categories = [...new Set(modules.flatMap((item) => item.terms.categories ?
   </section>
 
   <script>
-    const cards = [...document.querySelectorAll("[data-migrated-card]")];
-    const selects = [...document.querySelectorAll("[data-filter]")];
-    const search = document.querySelector("[data-filter-search]");
-    const count = document.querySelector("[data-result-count]");
+    const cards = [...document.querySelectorAll<HTMLElement>("[data-migrated-card]")];
+    const selects = [...document.querySelectorAll<HTMLSelectElement>("[data-filter]")];
+    const search = document.querySelector<HTMLInputElement>("[data-filter-search]")!;
+    const count = document.querySelector<HTMLElement>("[data-result-count]")!;
 
     function updateCards() {
       const query = search.value.trim().toLowerCase();
       let visible = 0;
 
       cards.forEach((card) => {
-        const matchesQuery = !query || card.dataset.title.includes(query) || card.textContent.toLowerCase().includes(query);
+        const matchesQuery = !query || (card.dataset.title ?? "").includes(query) || card.textContent.toLowerCase().includes(query);
         const matchesSelects = selects.every((select) => {
           const value = select.value;
-          return !value || (card.dataset[select.dataset.filter] || "").split("|").includes(value);
+          return !value || (card.dataset[select.dataset.filter ?? ""] || "").split("|").includes(value);
         });
         const shouldShow = matchesQuery && matchesSelects;
         card.hidden = !shouldShow;

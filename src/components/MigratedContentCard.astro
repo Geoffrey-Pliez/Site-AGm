@@ -1,10 +1,10 @@
 ---
 const { item } = Astro.props;
 
-const themes = item.terms?.themes ?? [];
-const actions = item.terms?.actions ?? [];
-const levels = item.terms?.niveau ?? [];
-const categories = item.terms?.categories ?? [];
+const themes: string[] = item.terms?.themes ?? [];
+const actions: string[] = item.terms?.actions ?? [];
+const levels: string[] = item.terms?.niveau ?? [];
+const categories: string[] = item.terms?.categories ?? [];
 const image = item.featuredImage?.url;
 ---
 
