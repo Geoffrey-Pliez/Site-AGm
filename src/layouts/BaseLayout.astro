@@ -22,7 +22,48 @@ const nav = [
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <title>{title}</title>
-  </head>
+
+      <!-- 🐛 Auto bug reporting -->
+      <script type="module">
+        import { actions } from "astro:actions";
+
+        function getStack(error) {
+          if (error?.stack) return error.stack;
+          if (typeof error === "string") return error;
+          return String(error);
+        }
+
+        async function reportBug(message, stack) {
+          try {
+            const res = await actions.reportBug({
+              message: message.slice(0, 500),
+              stack: stack?.slice(0, 8000),
+              url: location.href,
+              userAgent: navigator.userAgent,
+            });
+            if (res.data?.issueUrl) {
+              console.info("🐛 Bug reporté →", res.data.issueUrl);
+            }
+          } catch (e) {
+            // Fail silencieux : ne pas créer de boucle infinie
+            console.warn("Bug report échoué", e);
+          }
+        }
+
+        // Erreurs globales
+        window.addEventListener("error", (event) => {
+          const msg = event.error?.message || event.message || "Unknown error";
+          reportBug(msg, getStack(event.error));
+        });
+
+        // Promesses non gérées
+        window.addEventListener("unhandledrejection", (event) => {
+          const reason = event.reason;
+          const msg = reason?.message || String(reason);
+          reportBug(msg, getStack(reason));
+        });
+      </script>
+    </head>
   <body>
     <header class="site-header">
       <a class="brand" href="/">
