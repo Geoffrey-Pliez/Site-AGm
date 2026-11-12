@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { modules } from "../../data/site";
+import { modules, getLinkedFiches, getParentModule } from "../../data/site";
 
 export const prerender = true;
 
@@ -9,6 +9,8 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+const linkedFiches = getLinkedFiches(item.slug);
+const parentModule = item.type === "Fiche" ? getParentModule(item.slug) : undefined;
 ---
 
 <BaseLayout title={`${item.title} - AGmobile`}>
@@ -51,6 +53,27 @@ const { item } = Astro.props;
       <section class="video-panel">
         <h2>Aide vidéo</h2>
         <iframe src={item.videoUrl} title={`Aide vidéo - ${item.title}`} allowfullscreen></iframe>
+      </section>
+    )}
+
+    {parentModule && (
+      <section class="linked-panel">
+        <h2>Module parent</h2>
+        <p>
+          Cette fiche fait partie du module{" "}
+          <a href={`/modules/${parentModule.slug}/`}>{parentModule.title}</a>.
+        </p>
+      </section>
+    )}
+
+    {linkedFiches.length > 0 && (
+      <section class="linked-panel">
+        <h2>Fiches liées</h2>
+        <ul class="resource-list">
+          {linkedFiches.map((fiche) => (
+            <li><a href={`/modules/${fiche.slug}/`}>{fiche.title}</a></li>
+          ))}
+        </ul>
       </section>
     )}
   </article>
