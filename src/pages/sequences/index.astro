@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MigratedContentCard from "../../components/MigratedContentCard.astro";
 import wpData from "../../data/wp-content.json";
+import { sequences as curatedSequences, getLinkedFiches } from "../../data/site";
 
 const sequences = wpData.content.filter((item) => {
   const categories = item.terms.categories ?? [];
@@ -27,6 +28,41 @@ const sequences = wpData.content.filter((item) => {
         Les séquences proposées sont des agencements de modules. Elles peuvent aussi servir de
         base pour composer vos propres parcours en fonction du niveau, du thème et de l'action visée.
       </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Modules curatés</p>
+      <h2>Fiches liées aux modules</h2>
+      <p>
+        Chaque fiche ci-dessous pointe vers son module parent via son
+        <code>moduleSlug</code>, sans changer les slugs existants.
+      </p>
+    </div>
+    <div class="card-grid">
+      {curatedSequences.map((sequence) => {
+        const fiches = getLinkedFiches(sequence.slug);
+        const linked = fiches.length ? fiches : null;
+        return (
+          <article class="module-card" data-sequence-card data-slug={sequence.slug}>
+            <div class="module-body">
+              <p class="eyebrow">{sequence.type}</p>
+              <h2><a href={`/modules/${sequence.slug}/`}>{sequence.title}</a></h2>
+              <p>{sequence.excerpt}</p>
+              {linked ? (
+                <ul class="resource-list">
+                  {linked.map((fiche) => (
+                    <li><a href={`/modules/${fiche.slug}/`}>{fiche.title}</a></li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Aucune fiche liée pour le moment.</p>
+              )}
+            </div>
+          </article>
+        );
+      })}
     </div>
   </section>
 
