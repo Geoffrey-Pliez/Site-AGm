@@ -29,7 +29,32 @@ export const filters = {
   levels: ["M3", "P1", "P3-P4", "P5-P6", "S1 à S3"],
 };
 
-export const modules = [
+export interface SiteDocument {
+  label: string;
+  url: string;
+}
+
+export interface SiteItem {
+  title: string;
+  slug: string;
+  type: string;
+  date: string;
+  excerpt: string;
+  objective: string;
+  summary: string;
+  image: string;
+  sourceUrl: string;
+  activityUrl?: string;
+  videoUrl?: string;
+  documents: SiteDocument[];
+  themes: string[];
+  actions: string[];
+  levels: string[];
+  moduleSlug?: string;
+  ficheIds?: string[];
+}
+
+export const modules: SiteItem[] = [
   {
     title: "Prise en main d'Apprenti Géomètre mobile dès 5 ans",
     slug: "prise-en-main-agm-5-ans",
@@ -112,6 +137,7 @@ export const modules = [
     themes: ["Aire", "Fractions"],
     actions: ["Paver", "Comparer"],
     levels: ["P3-P4"],
+    ficheIds: ["paver-une-figure-1", "paver-une-figure-3"],
   },
   {
     title: "Paver une figure - fiche 1",
@@ -132,6 +158,7 @@ export const modules = [
     themes: ["Aire", "Fractions"],
     actions: ["Paver", "Comparer"],
     levels: ["P3-P4"],
+    moduleSlug: "paver-des-figures",
   },
   {
     title: "Paver une figure - fiche 3",
@@ -152,6 +179,7 @@ export const modules = [
     themes: ["Aire", "Fractions"],
     actions: ["Paver", "Comparer"],
     levels: ["P3-P4"],
+    moduleSlug: "paver-des-figures",
   },
   {
     title: "Agrandissements",
@@ -210,3 +238,13 @@ export const modules = [
 ];
 
 export const sequences = modules.filter((item) => item.type === "Séquence");
+
+export function getLinkedFiches(moduleSlug: string) {
+  return modules.filter((item) => item.type === "Fiche" && item.moduleSlug === moduleSlug);
+}
+
+export function getParentModule(ficheSlug: string) {
+  const fiche = modules.find((item) => item.type === "Fiche" && item.slug === ficheSlug);
+  if (!fiche?.moduleSlug) return undefined;
+  return modules.find((item) => item.slug === fiche.moduleSlug);
+}
