@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import AppCta from "../../components/AppCta.astro";
 import MigratedContentCard from "../../components/MigratedContentCard.astro";
 import wpData from "../../data/wp-content.json";
 import { sequences as curatedSequences, getLinkedFiches } from "../../data/site";
@@ -36,8 +37,8 @@ const sequences = wpData.content.filter((item) => {
       <p class="eyebrow">Modules curatés</p>
       <h2>Fiches liées aux modules</h2>
       <p>
-        Chaque fiche ci-dessous pointe vers son module parent via son
-        <code>moduleSlug</code>, sans changer les slugs existants.
+        Chaque fiche ci-dessous pointe vers son module parent via le mapping
+        <code>contentMap</code>, sans changer les slugs existants.
       </p>
     </div>
     <div class="card-grid">
@@ -74,5 +75,13 @@ const sequences = wpData.content.filter((item) => {
     <div class="card-grid">
       {sequences.map((item) => <MigratedContentCard item={item} />)}
     </div>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Tester</p>
+        <h2>Ouvrir une séquence dans l'appli</h2>
+      </div>
+      {sequences.map((item) => <AppCta slug={item.slug} label={item.title} />)}
+    </section>
   </section>
 </BaseLayout>

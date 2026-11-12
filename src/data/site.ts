@@ -1,3 +1,5 @@
+import { getFichesForModule, getModuleForFiche } from "../lib/contentMap";
+
 export const assetBase = "/wp-content/uploads";
 
 export const filters = {
@@ -50,8 +52,6 @@ export interface SiteItem {
   themes: string[];
   actions: string[];
   levels: string[];
-  moduleSlug?: string;
-  ficheIds?: string[];
 }
 
 export const modules: SiteItem[] = [
@@ -137,7 +137,6 @@ export const modules: SiteItem[] = [
     themes: ["Aire", "Fractions"],
     actions: ["Paver", "Comparer"],
     levels: ["P3-P4"],
-    ficheIds: ["paver-une-figure-1", "paver-une-figure-3"],
   },
   {
     title: "Paver une figure - fiche 1",
@@ -158,7 +157,6 @@ export const modules: SiteItem[] = [
     themes: ["Aire", "Fractions"],
     actions: ["Paver", "Comparer"],
     levels: ["P3-P4"],
-    moduleSlug: "paver-des-figures",
   },
   {
     title: "Paver une figure - fiche 3",
@@ -179,7 +177,6 @@ export const modules: SiteItem[] = [
     themes: ["Aire", "Fractions"],
     actions: ["Paver", "Comparer"],
     levels: ["P3-P4"],
-    moduleSlug: "paver-des-figures",
   },
   {
     title: "Agrandissements",
@@ -239,12 +236,15 @@ export const modules: SiteItem[] = [
 
 export const sequences = modules.filter((item) => item.type === "Séquence");
 
-export function getLinkedFiches(moduleSlug: string) {
-  return modules.filter((item) => item.type === "Fiche" && item.moduleSlug === moduleSlug);
+// Le mapping fiche <-> module vient exclusivement de src/lib/contentMap.ts.
+export function getLinkedFiches(moduleSlug: string): SiteItem[] {
+  return getFichesForModule(moduleSlug)
+    .map((slug) => modules.find((item) => item.slug === slug))
+    .filter((item): item is SiteItem => item !== undefined);
 }
 
-export function getParentModule(ficheSlug: string) {
-  const fiche = modules.find((item) => item.type === "Fiche" && item.slug === ficheSlug);
-  if (!fiche?.moduleSlug) return undefined;
-  return modules.find((item) => item.slug === fiche.moduleSlug);
+export function getParentModule(ficheSlug: string): SiteItem | undefined {
+  const moduleSlug = getModuleForFiche(ficheSlug);
+  if (!moduleSlug) return undefined;
+  return modules.find((item) => item.slug === moduleSlug);
 }

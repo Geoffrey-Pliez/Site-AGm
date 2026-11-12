@@ -99,6 +99,31 @@ La page d'accueil WordPress est partiellement reprise dans `src/pages/index.astr
 - Une verification des assets manquants a ete effectuee (22 corriges, 5 restant en 404 sur la source ou avec ancres).
 - Les embeds YouTube et liens vers le logiciel AG sont repris dans le HTML WordPress migre.
 
+## Addendum étapes 2+3+4 (2026-11-12)
+
+Contrat lien appli : `getAppLink(slug)` (`src/lib/appLink.ts`) retourne
+`https://ag.crem.be/open/<slug>` ; `APP_BASE_URL = https://ag.crem.be`,
+`INSTALL_URL = https://ag.crem.be/` ; slug validé `lowercase alphanum + tirets`.
+
+Mapping fiche -> module (`src/lib/contentMap.ts`, dérivation kind depuis
+catégories : `Actions` = fiche, `Modules` = module, catégorie contenant
+"séquence" normalisé = séquence) :
+- `paver-une-figure-1` -> `paver-des-figures`
+- `paver-une-figure-3` -> `paver-des-figures`
+- `puzzle-sam-loyd-3` -> `puzzle-sam-loyd`
+Autres fiches éventuelles : meilleur recouvrement themes/actions/niveau,
+`null` si aucun recouvrement (aucun lien cassé, `validateLinks()` vert).
+
+CTA : composant `src/components/AppCta.astro` ("Tester dans l'appli" ->
+`getAppLink(slug)` `target="_blank"` + fallback "Installer AGm" vers
+`INSTALL_URL` + QR code `api.qrserver.com` encodant l'URL appli). Câblé dans
+`[...path].astro` (avec fiches liées si module), `modules/[slug].astro`,
+`sequences/index.astro` (CTA par séquence) et nouveau `sequences/[slug].astro`.
+
+Décision jpg : `boy-2782731_1920-1024x1024.jpg` (featured + ref de `notions`,
+404 source) substitué par `boy-2841686_1920-2-1024x1024.jpg` existant en local
+(2 refs remplacées dans `wp-content.json`, slugs inchangés, 59 contenus).
+
 ## Etat final de cette passe
 
 - 31 articles WordPress migres.

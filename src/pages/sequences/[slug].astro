@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AppCta from "../../components/AppCta.astro";
+import wpData from "../../data/wp-content.json";
+import { getKind } from "../../lib/contentMap";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return wpData.content
+    .filter((item) => getKind(item) === "sequence")
+    .map((item) => ({ params: { slug: item.slug }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const allTerms = [
+  ...(item.terms.niveau ?? []),
+  ...(item.terms.themes ?? []),
+  ...(item.terms.actions ?? []),
+  ...(item.terms.categories ?? []),
+];
+---
+
+<BaseLayout title={`${item.title} - Séquence Apprenti Géomètre mobile`} description={item.excerpt}>
+  <article class="wp-page">
+    <header class="wp-header">
+      <p class="eyebrow">Séquence d'apprentissage</p>
+      <h1>{item.title}</h1>
+      {item.excerpt && <p>{item.excerpt}</p>}
+      {allTerms.length > 0 && (
+        <div class="tags">
+          {allTerms.slice(0, 8).map((term) => <span>{term}</span>)}
+        </div>
+      )}
+    </header>
+
+    {item.featuredImage && (
+      <figure class="wp-featured">
+        <img src={item.featuredImage.url} alt={item.featuredImage.alt || ""} />
+      </figure>
+    )}
+
+    <div class="wp-content" set:html={item.contentHtml} />
+
+    <AppCta slug={item.slug} label={item.title} />
+
+    <footer class="wp-source">
+      <a class="button secondary" href={item.sourceUrl} target="_blank" rel="noreferrer">Voir la source WordPress</a>
+      <a class="button primary" href="/sequences/">Retour aux séquences</a>
+    </footer>
+  </article>
+</BaseLayout>
