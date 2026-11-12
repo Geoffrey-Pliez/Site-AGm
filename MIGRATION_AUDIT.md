@@ -106,3 +106,33 @@ La page d'accueil WordPress est partiellement reprise dans `src/pages/index.astr
 - 272 medias publics references par l'API au moment de la migration.
 - Build Astro verifie avec `pnpm run build`.
 - Routes controlees en HTTP : `/contenus/`, `/fractionner/`, `/2025/12/09/geoplan-physique-et-numerique-a-partir-de-5-ans/`.
+
+## Addendum glossaire site <-> app (etape 1 : lien Fiche -> Module)
+
+Objectif etape 1 : relier chaque Fiche site a son Module parent sans deep-link
+complet vers l'app, sans rename, sans refonte Firestore, sans changer les slugs.
+
+| Niveau site | Exemple site | Niveau app vise | Exemple app | Lien etape 1 |
+| --- | --- | --- | --- | --- |
+| Theme | Aire, Fractions | Theme | Aire, Fractions | Filtres partages, pas de mapping dur |
+| Module / Sequence | `paver-des-figures` | Module | Module pavage | Page `/modules/[slug]/` affiche ses fiches |
+| Sequence | `agrandissements` | Parcours enseignant | Assemblage de modules | Liste curatee + archive migree |
+| Fiche | `paver-une-figure-1`, `paver-une-figure-3` | Fichier / activite | Fiche exacte a ouvrir en 1 clic | `moduleSlug: paver-des-figures` |
+
+Details techniques :
+
+- `src/data/site.ts` : `moduleSlug?: string` sur chaque Fiche, `ficheIds?: string[]`
+  sur le parent, plus `getLinkedFiches()` et `getParentModule()`.
+- `src/pages/modules/[slug].astro` : section "Fiches liees" sur le Module,
+  bandeau "Module parent" sur la Fiche.
+- `src/pages/sequences/index.astro` : bloc "Modules cures" avec fiches liees,
+  archive WordPress migree inchangee en dessous.
+- Slugs existants inchanges : les 8 entrees `src/data/site.ts` et les 59
+  contenus migres gardent leurs URLs.
+
+Note collision `cachedSequences` : le nom peut designer a la fois le cache local
+de l'app mobile (sequences mises en cache pour usage hors-ligne) et les
+sequences du site. Etape 1 ne touche pas au cache app : cote site, "Sequence"
+reste un assemblage editorial de Modules/Fiches, sans cle partagde avec le
+cache mobile. Le futur deep-link utilisera l'identifiant Fiche exact, pas le
+nom du cache.
