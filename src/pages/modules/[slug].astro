@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import AppCta from "../../components/AppCta.astro";
 import { modules } from "../../data/site";
 
 export const prerender = true;
@@ -43,6 +44,7 @@ const { item } = Astro.props;
           )
         }
         {item.activityUrl && <a class="button primary full" href={item.activityUrl} target="_blank" rel="noreferrer">Tester l'activité</a>}
+        <AppCta slug={item.slug} />
         <a class="button secondary full" href={item.sourceUrl} target="_blank" rel="noreferrer">Voir la page WordPress source</a>
       </aside>
     </div>

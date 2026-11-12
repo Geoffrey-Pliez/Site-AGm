@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import AppCta from "../../components/AppCta.astro";
 import MigratedContentCard from "../../components/MigratedContentCard.astro";
 import wpData from "../../data/wp-content.json";
 
@@ -38,5 +39,13 @@ const sequences = wpData.content.filter((item) => {
     <div class="card-grid">
       {sequences.map((item) => <MigratedContentCard item={item} />)}
     </div>
+
+    <section class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Tester</p>
+        <h2>Ouvrir une séquence dans l'appli</h2>
+      </div>
+      {sequences.map((item) => <AppCta slug={item.slug} label={item.title} />)}
+    </section>
   </section>
 </BaseLayout>

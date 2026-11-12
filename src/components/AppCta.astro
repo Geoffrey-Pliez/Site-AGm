@@ -1,0 +1,34 @@
+---
+import { INSTALL_URL, getAppLink } from "../lib/appLink";
+
+interface Props {
+  slug: string;
+  label?: string;
+}
+
+const { slug, label = "Tester dans l'appli" } = Astro.props;
+const appUrl = getAppLink(slug);
+const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(appUrl)}`;
+---
+
+<div class="app-cta">
+  <a class="button primary" href={appUrl} target="_blank" rel="noreferrer">Tester dans l'appli</a>
+  <p class="app-cta-fallback">
+    {label === "Tester dans l'appli" ? "" : `${label} `}
+    Appli non installée ? <a href={INSTALL_URL} target="_blank" rel="noreferrer">Installer AGm</a>
+  </p>
+  <img src={qrUrl} alt={`QR code vers ${appUrl}`} loading="lazy" width="140" height="140" />
+</div>
+
+<style>
+  .app-cta {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+    margin: 1rem 0;
+  }
+  .app-cta-fallback {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+</style>

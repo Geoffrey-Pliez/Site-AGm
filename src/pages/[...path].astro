@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import AppCta from "../components/AppCta.astro";
 import wpData from "../data/wp-content.json";
+import { getFichesForModule, getKind } from "../lib/contentMap";
 
 export const prerender = true;
 
@@ -12,6 +14,11 @@ export function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+const kind = getKind(item);
+const relatedFiches = kind === "module" ? getFichesForModule(item.slug) : [];
+const relatedItems = relatedFiches
+  .map((slug) => wpData.content.find((entry) => entry.slug === slug))
+  .filter((entry) => entry !== undefined);
 const allTerms = [
   ...(item.terms.niveau ?? []),
   ...(item.terms.themes ?? []),
@@ -41,6 +48,19 @@ const allTerms = [
     )}
 
     <div class="wp-content" set:html={item.contentHtml} />
+
+    <AppCta slug={item.slug} />
+
+    {relatedItems.length > 0 && (
+      <section class="related-fiches">
+        <h2>Fiches liées</h2>
+        <ul>
+          {relatedItems.map((related) => (
+            <li><a href={related.localUrl}>{related.title}</a></li>
+          ))}
+        </ul>
+      </section>
+    )}
 
     <footer class="wp-source">
       <a class="button secondary" href={item.sourceUrl} target="_blank" rel="noreferrer">Voir la source WordPress</a>
