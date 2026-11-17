@@ -12,7 +12,7 @@ describe("site links cross-check (contentMap single source of truth)", () => {
   });
 
   it("keeps site.ts free of mapping fields", () => {
-    for (const item of modules as Array<Record<string, unknown>>) {
+    for (const item of modules) {
       expect(item).not.toHaveProperty("moduleSlug");
       expect(item).not.toHaveProperty("ficheIds");
     }

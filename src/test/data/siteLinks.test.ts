@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getLinkedFiches, getParentModule, modules } from "../../data/site";
+import { getFichesForModule } from "../../lib/contentMap";
 
 const EXPECTED_SLUGS = [
   "prise-en-main-agm-5-ans",
@@ -27,9 +28,9 @@ describe("site Fiche -> Module link", () => {
     expect(fiches).toEqual(["paver-une-figure-1", "paver-une-figure-3"]);
   });
 
-  it("keeps ficheIds consistent with moduleSlug links", () => {
-    const parent = modules.find((item) => item.slug === "paver-des-figures");
+  it("derives linked fiches from the single contentMap source", () => {
     const linked = getLinkedFiches("paver-des-figures").map((item) => item.slug).sort();
-    expect([...(parent?.ficheIds ?? [])].sort()).toEqual(linked);
+    expect(getFichesForModule("paver-des-figures").sort()).toEqual(linked);
+    expect(modules.some((item) => "moduleSlug" in item || "ficheIds" in item)).toBe(false);
   });
 });
