@@ -142,12 +142,14 @@ complet vers l'app, sans rename, sans refonte Firestore, sans changer les slugs.
 | Theme | Aire, Fractions | Theme | Aire, Fractions | Filtres partages, pas de mapping dur |
 | Module / Sequence | `paver-des-figures` | Module | Module pavage | Page `/modules/[slug]/` affiche ses fiches |
 | Sequence | `agrandissements` | Parcours enseignant | Assemblage de modules | Liste curatee + archive migree |
-| Fiche | `paver-une-figure-1`, `paver-une-figure-3` | Fichier / activite | Fiche exacte a ouvrir en 1 clic | `moduleSlug: paver-des-figures` |
+| Fiche | `paver-une-figure-1`, `paver-une-figure-3` | Fichier / activite | Fiche exacte a ouvrir en 1 clic | `contentMap` -> `paver-des-figures` |
 
 Details techniques :
 
-- `src/data/site.ts` : `moduleSlug?: string` sur chaque Fiche, `ficheIds?: string[]`
-  sur le parent, plus `getLinkedFiches()` et `getParentModule()`.
+- `src/lib/contentMap.ts` : source unique du mapping Fiche -> Module
+  (`FICHE_TO_MODULE`, `getModuleForFiche`, `getFichesForModule`, `validateLinks`).
+- `src/data/site.ts` : `getLinkedFiches()` et `getParentModule()` derivent de
+  `contentMap` (aucun champ `moduleSlug`/`ficheIds` duplique dans les donnees).
 - `src/pages/modules/[slug].astro` : section "Fiches liees" sur le Module,
   bandeau "Module parent" sur la Fiche.
 - `src/pages/sequences/index.astro` : bloc "Modules cures" avec fiches liees,
@@ -161,3 +163,11 @@ sequences du site. Etape 1 ne touche pas au cache app : cote site, "Sequence"
 reste un assemblage editorial de Modules/Fiches, sans cle partagde avec le
 cache mobile. Le futur deep-link utilisera l'identifiant Fiche exact, pas le
 nom du cache.
+
+## Addendum mkv hors git (2026-11-17)
+
+10 mkv (~353Mo) sous `public/wp-content/uploads/2021/07/` retires du suivi git
+(`git rm --cached`, fichiers gardes sur disque, refs dans `wp-content.json`
+inchangees). Ignore via `public/wp-content/uploads/**/*.mkv`.
+Proposition : heberger ces videos sur CDN/stockage externe (URLs mises a jour
+dans `wp-content.json`), ou activer Git LFS pour `*.mkv` si depot local requis.
