@@ -42,7 +42,7 @@ const allTerms = [
 
     <div class="wp-content" set:html={item.contentHtml} />
 
-    <AppCta slug={item.slug} label={item.title} />
+    <AppCta slug={item.slug} fallbackPrefix={item.title} />
 
     <footer class="wp-source">
       <a class="button secondary" href={item.sourceUrl} target="_blank" rel="noreferrer">Voir la source WordPress</a>

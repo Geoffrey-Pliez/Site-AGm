@@ -13,3 +13,8 @@ export function getAppLink(slug: string): string {
   }
   return `${APP_BASE_URL}/open/${slug}`;
 }
+
+export function tryGetAppLink(slug: string): string | null {
+  if (!isValidSlug(slug)) return null;
+  return `${APP_BASE_URL}/open/${slug}`;
+}

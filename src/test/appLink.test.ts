@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { APP_BASE_URL, INSTALL_URL, getAppLink } from "../lib/appLink";
+import { APP_BASE_URL, INSTALL_URL, getAppLink, tryGetAppLink } from "../lib/appLink";
 
 describe("getAppLink", () => {
   it("builds the open URL for a valid slug", () => {
@@ -22,5 +22,14 @@ describe("getAppLink", () => {
     "paveré",
   ])("rejects invalid slug %s", (slug) => {
     expect(() => getAppLink(slug)).toThrow();
+  });
+
+  it("tryGetAppLink returns the URL for a valid slug", () => {
+    expect(tryGetAppLink("paver-des-figures")).toBe("https://ag.crem.be/open/paver-des-figures");
+  });
+
+  it("tryGetAppLink returns null for an invalid slug", () => {
+    expect(tryGetAppLink("")).toBeNull();
+    expect(tryGetAppLink("Paver--Figures")).toBeNull();
   });
 });
