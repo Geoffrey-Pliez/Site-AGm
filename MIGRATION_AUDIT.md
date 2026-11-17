@@ -139,3 +139,17 @@ Décision jpg : `boy-2782731_1920-1024x1024.jpg` (featured + ref de `notions`,
 inchangees). Ignore via `public/wp-content/uploads/**/*.mkv`.
 Proposition : heberger ces videos sur CDN/stockage externe (URLs mises a jour
 dans `wp-content.json`), ou activer Git LFS pour `*.mkv` si depot local requis.
+
+## Addendum mapping unique + AppCta durci (2026-11-17)
+
+`src/lib/contentMap.ts` = seule source de verite du mapping fiche -> module
+(`FICHE_TO_MODULE` / `FICHE_MODULE_MAP`, `getModuleForFiche`,
+`getFichesForModule`, `validateLinks`). `src/data/site.ts` ne porte aucun champ
+`moduleSlug`/`ficheIds` (test croise `src/test/siteLinks.test.ts`).
+`src/lib/appLink.ts` : `getAppLink` (throw si slug invalide) inchange +
+`tryGetAppLink(slug): string | null`. `AppCta.astro` : garde centrale
+`tryGetAppLink` (slug invalide -> `<span ... disabled>` sans lien ni QR),
+props `{ slug; label? (= "Tester dans l'appli", texte bouton);
+fallbackPrefix?; showQr? (= true) }`, QR seulement si `showQr && appUrl`.
+Appelants : `sequences/[slug].astro` -> `fallbackPrefix={item.title}`,
+`sequences/index.astro` -> `showQr={false}` (pas de N QR en liste).

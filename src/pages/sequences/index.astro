@@ -45,7 +45,7 @@ const sequences = wpData.content.filter((item) => {
         <p class="eyebrow">Tester</p>
         <h2>Ouvrir une séquence dans l'appli</h2>
       </div>
-      {sequences.map((item) => <AppCta slug={item.slug} label={item.title} />)}
+      {sequences.map((item) => <AppCta slug={item.slug} showQr={false} />)}
     </section>
   </section>
 </BaseLayout>
