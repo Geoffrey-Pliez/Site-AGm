@@ -6,3 +6,6 @@ dist/
 .env.*
 !.env.example
 src/ag-upload/Firebase/firebase-config.json
+# Videos lourdes (~353Mo) : refs conservees dans wp-content.json, fichiers hors git.
+# Hebergement externe/CDN ou Git LFS recommande (voir MIGRATION_AUDIT.md).
+public/wp-content/uploads/**/*.mkv

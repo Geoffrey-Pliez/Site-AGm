@@ -131,3 +131,11 @@ Décision jpg : `boy-2782731_1920-1024x1024.jpg` (featured + ref de `notions`,
 - 272 medias publics references par l'API au moment de la migration.
 - Build Astro verifie avec `pnpm run build`.
 - Routes controlees en HTTP : `/contenus/`, `/fractionner/`, `/2025/12/09/geoplan-physique-et-numerique-a-partir-de-5-ans/`.
+
+## Addendum mkv hors git (2026-11-17)
+
+10 mkv (~353Mo) sous `public/wp-content/uploads/2021/07/` retires du suivi git
+(`git rm --cached`, fichiers gardes sur disque, refs dans `wp-content.json`
+inchangees). Ignore via `public/wp-content/uploads/**/*.mkv`.
+Proposition : heberger ces videos sur CDN/stockage externe (URLs mises a jour
+dans `wp-content.json`), ou activer Git LFS pour `*.mkv` si depot local requis.
