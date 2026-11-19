@@ -102,7 +102,7 @@ La page d'accueil WordPress est partiellement reprise dans `src/pages/index.astr
 ## Addendum étapes 2+3+4 (2026-11-12)
 
 Contrat lien appli : `getAppLink(slug)` (`src/lib/appLink.ts`) retourne
-`https://ag.crem.be/open/<slug>` ; `APP_BASE_URL = https://ag.crem.be`,
+`https://ag.crem.be/?slug=<slug>` (slug URL-encode via `encodeURIComponent`) ; `APP_BASE_URL = https://ag.crem.be`,
 `INSTALL_URL = https://ag.crem.be/` ; slug validé `lowercase alphanum + tirets`.
 
 Mapping fiche -> module (`src/lib/contentMap.ts`, dérivation kind depuis
