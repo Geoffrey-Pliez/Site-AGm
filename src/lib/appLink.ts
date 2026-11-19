@@ -11,10 +11,10 @@ export function getAppLink(slug: string): string {
   if (!isValidSlug(slug)) {
     throw new Error(`Invalid app slug: ${JSON.stringify(slug)}`);
   }
-  return `${APP_BASE_URL}/open/${slug}`;
+  return `${APP_BASE_URL}/?slug=${encodeURIComponent(slug)}`;
 }
 
 export function tryGetAppLink(slug: string): string | null {
   if (!isValidSlug(slug)) return null;
-  return `${APP_BASE_URL}/open/${slug}`;
+  return `${APP_BASE_URL}/?slug=${encodeURIComponent(slug)}`;
 }

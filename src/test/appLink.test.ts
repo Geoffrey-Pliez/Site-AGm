@@ -3,7 +3,7 @@ import { APP_BASE_URL, INSTALL_URL, getAppLink, tryGetAppLink } from "../lib/app
 
 describe("getAppLink", () => {
   it("builds the open URL for a valid slug", () => {
-    expect(getAppLink("paver-des-figures")).toBe("https://ag.crem.be/open/paver-des-figures");
+    expect(getAppLink("paver-des-figures")).toBe("https://ag.crem.be/?slug=paver-des-figures");
   });
 
   it("exposes the base constants", () => {
@@ -25,7 +25,7 @@ describe("getAppLink", () => {
   });
 
   it("tryGetAppLink returns the URL for a valid slug", () => {
-    expect(tryGetAppLink("paver-des-figures")).toBe("https://ag.crem.be/open/paver-des-figures");
+    expect(tryGetAppLink("paver-des-figures")).toBe("https://ag.crem.be/?slug=paver-des-figures");
   });
 
   it("tryGetAppLink returns null for an invalid slug", () => {
