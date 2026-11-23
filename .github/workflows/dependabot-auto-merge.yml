@@ -26,11 +26,31 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Wait for CI and enable auto-merge
+      - name: Wait for CI checks
         if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr checks --watch "$PR_URL"
-          gh pr merge --auto --squash "$PR_URL"
+          PR="${{ github.event.pull_request.number }}"
+          REPO="${{ github.repository }}"
+          for i in $(seq 1 120); do
+            json="$(gh pr checks "$PR" --repo "$REPO" --json name,state,bucket,workflow)"
+            ci_checks="$(echo "$json" | jq '[.[] | select((.workflow | test("auto-merge|dependabot"; "i")) | not)]')"
+            failed="$(echo "$ci_checks" | jq '[.[] | select(.bucket == "fail")] | length')"
+            pending="$(echo "$ci_checks" | jq '[.[] | select(.state == "PENDING" or .state == "IN_PROGRESS" or .state == "QUEUED" or .state == "STARTING")] | length')"
+            if [ "$failed" -gt 0 ]; then
+              echo "CI checks failed"
+              exit 1
+            fi
+            if [ "$pending" -eq 0 ]; then
+              echo "CI checks complete"
+              break
+            fi
+            sleep 10
+          done
+      - name: Merge (squash)
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        run: gh pr merge --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
