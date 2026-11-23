@@ -15,17 +15,17 @@
   },
   "dependencies": {
     "@apphosting/astro-adapter": "^0.0.2",
-    "@astrojs/node": "^11.1.12",
-    "astro": "^7.4.11",
-    "firebase": "^13.3.0",
+    "@astrojs/node": "^11.1.14",
+    "astro": "^7.4.13",
+    "firebase": "^13.4.0",
     "lit": "^3.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
-    "@vitest/coverage-v8": "^5.1.0",
-    "firebase-tools": "^15.36.0",
+    "@vitest/coverage-v8": "^5.1.1",
+    "firebase-tools": "^15.37.0",
     "happy-dom": "^21.0.4",
     "typescript": "^6.0.3",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   }
 }
